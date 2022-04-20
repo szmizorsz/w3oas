@@ -1,14 +1,11 @@
 import type { NextPage } from 'next'
-import Layout from "../components/layout"
+import Layout from '../components/layout'
+import UserInfo from '../components/userInfo'
 
 const Home: NextPage = () => {
   return (
     <Layout>
-      <h1>NextAuth.js Example</h1>
-      <p>
-        This is an example site to demonstrate how to use{" "}
-        <a href="https://next-auth.js.org">NextAuth.js</a> for authentication.
-      </p>
+      <UserInfo />
     </Layout>
   )
 }
