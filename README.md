@@ -1,5 +1,24 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+### 2. Configure your local environment
+
+Copy the .env.local.example file in this directory to .env.local (which will be ignored by Git):
+
+```
+cp .env.local.example .env.local
+```
+
+Generate a secret for the JWT token signing, go to https://generate-secret.now.sh/32
+And set it in the NEXTAUTH_SECRET variable.
+
+Set up a new discord application with Oauth2 settings.
+Set the redirect URL:
+http://localhost:3000/api/auth/callback/discord
+
+Add details for the Discord provider from your Discord application: 
+- NEXT_PUBLIC_DISCORD_CLIENT_ID
+- DISCORD_CLIENT_SECRET
+
 ## Getting Started
 
 First, run the development server:
@@ -32,3 +51,6 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+
