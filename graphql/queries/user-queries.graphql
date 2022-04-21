@@ -1,0 +1,26 @@
+mutation upsertUser(
+  $discord_id: String!
+  $discord_email: String
+  $discord_user_name: String
+  $discord_avatar: String
+) {
+  insert_user_one(
+    object: {
+      discord_avatar: $discord_avatar
+      discord_email: $discord_email
+      discord_id: $discord_id
+      discord_user_name: $discord_user_name
+    }
+    on_conflict: {
+      constraint: user_discord_id_key
+      update_columns: [
+        discord_email
+        discord_id
+        discord_user_name
+        discord_avatar
+      ]
+    }
+  ) {
+    id
+  }
+}
