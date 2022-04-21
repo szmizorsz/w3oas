@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "console": "dotenv -e .env.local -- hasura console --project hasura"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
@@ -26,6 +27,7 @@
     "@types/react": "18.0.5",
     "@types/react-dom": "18.0.1",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "dotenv-cli": "^5.1.0",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.5",
     "eslint-config-prettier": "^8.5.0",
