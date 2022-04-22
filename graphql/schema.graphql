@@ -260,10 +260,10 @@ type subscription_root {
 columns and relationships of "user"
 """
 type user {
-  discord_avatar: String!
-  discord_email: String!
+  discord_avatar: String
+  discord_email: String
   discord_id: String!
-  discord_user_name: String!
+  discord_user_name: String
   id: Int!
 }
 

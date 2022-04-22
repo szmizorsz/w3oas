@@ -10,9 +10,12 @@
     "lint:fix": "next lint --fix",
     "console": "dotenv -e .env.local -- hasura console --project hasura",
     "export:schema": "dotenv -e .env.local -- cross-var gq http://localhost:8080/v1/graphql -H \"X-Hasura-Admin-Secret: %HASURA_GRAPHQL_ADMIN_SECRET%\" --introspect > graphql/schema.graphql",
-    "generate": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config codegen.yml",
+    "apply:metadata": "dotenv -e .env.local -v NODE_OPTIONS=null -- cross-var hasura metadata apply --project hasura",
+    "apply:migration": "dotenv -e .env.local -v NODE_OPTIONS=null -- cross-var hasura migrate apply --all-databases --project hasura"
   },
   "dependencies": {
+    "@apollo/client": "^3.6.0-rc.1",
     "@chakra-ui/icons": "^1.1.7",
     "@chakra-ui/react": "^1.8.8",
     "@emotion/react": "^11.9.0",
