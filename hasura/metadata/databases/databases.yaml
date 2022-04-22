@@ -1,0 +1,8 @@
+- name: w3oas
+  kind: postgres
+  configuration:
+    connection_info:
+      use_prepared_statements: false
+      database_url: postgres://postgres:postgrespassword@postgres:5432/postgres
+      isolation_level: read-committed
+  tables: "!include w3oas/tables/tables.yaml"
