@@ -1,10 +1,8 @@
 import NextAuth from 'next-auth'
 import DiscordProvider from 'next-auth/providers/discord'
+import { upsertUserFromTokenInDB } from '../../../src/util/UserUtil'
 
-// For more information on each option (and a full list of options) go to
-// https://next-auth.js.org/configuration/options
 export default NextAuth({
-  // https://next-auth.js.org/configuration/providers/oauth
   providers: [
     DiscordProvider({
       clientId: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID,
@@ -18,8 +16,17 @@ export default NextAuth({
     colorScheme: 'light',
   },
   callbacks: {
-    async jwt({ token }) {
-      token.userRole = 'admin'
+    async jwt({ token, account }) {
+      // If the account is present that means this JWT callback was called after sign in
+      // In later phases (when the clients gets the session so the JWT is updated) the account is not present
+      // So we execute the following logic only on sign in
+      if (account) {
+        const uspertResult = await upsertUserFromTokenInDB(token)
+        if (!uspertResult) {
+          throw new Error('Could not upsert user in db!')
+        }
+      }
+
       return token
     },
   },
