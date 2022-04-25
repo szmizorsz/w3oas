@@ -16,6 +16,12 @@ export default NextAuth({
     colorScheme: 'light',
   },
   callbacks: {
+    async session({ session, token }) {
+      session.userId = token.userId
+
+      return session
+    },
+
     async jwt({ token, account }) {
       // If the account is present that means this JWT callback was called after sign in
       // In later phases (when the clients gets the session so the JWT is updated) the account is not present
@@ -25,6 +31,7 @@ export default NextAuth({
         if (!uspertResult) {
           throw new Error('Could not upsert user in db!')
         }
+        token.userId = uspertResult
       }
 
       return token
