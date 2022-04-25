@@ -11,6 +11,7 @@ import {
 import styled from '@emotion/styled'
 import Link from 'next/link'
 import { useWeb3 } from '../util/Web3Provider'
+import { useUpdateWalletForUserByIdMutation } from '../../graphql/generated/graphql'
 
 const Avatar = styled.span`
   border-radius: 2rem;
@@ -25,11 +26,29 @@ const Avatar = styled.span`
 export default function Header() {
   const { web3Loading, web3Provider, connectWallet, disconnectWallet } =
     useWeb3()
+  const [updateWallet] = useUpdateWalletForUserByIdMutation()
 
   const { data: session, status } = useSession()
   const sessionLoading = status === 'loading'
 
   if (sessionLoading || web3Loading) return <p>Loading...</p>
+
+  const connectWalletAndSaveToDB = async () => {
+    console.log('jwt ' + session?.encodedJwt)
+    const accounts = await connectWallet()
+    if (!session?.userId) {
+      throw Error('UserId is not defined in the session')
+    }
+    if (!accounts) {
+      throw Error('Wallet address is not available')
+    }
+    updateWallet({
+      variables: {
+        user_id: session?.userId,
+        address: accounts[0],
+      },
+    })
+  }
 
   return (
     <Flex
@@ -64,7 +83,7 @@ export default function Header() {
                   colorScheme="blue"
                   variant="solid"
                   border="1px"
-                  onClick={connectWallet}
+                  onClick={connectWalletAndSaveToDB}
                 >
                   Connect Wallet
                 </Button>

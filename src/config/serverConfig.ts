@@ -27,3 +27,5 @@ export const envVars = {
   DISCORD_CLIENT_SECRET,
   NEXT_PUBLIC_GRAPHQL_URL,
 }
+
+export const hasuraRole = 'member'

@@ -1,3 +1,43 @@
 table:
   schema: public
   name: user
+insert_permissions:
+  - role: member
+    permission:
+      check:
+        id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - id
+        - discord_id
+        - discord_user_name
+        - discord_avatar
+        - discord_email
+        - wallet_address
+      backend_only: false
+select_permissions:
+  - role: member
+    permission:
+      columns:
+        - id
+        - discord_avatar
+        - discord_email
+        - discord_id
+        - discord_user_name
+        - wallet_address
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: member
+    permission:
+      columns:
+        - id
+        - discord_avatar
+        - discord_email
+        - discord_id
+        - discord_user_name
+        - wallet_address
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: {}

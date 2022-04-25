@@ -1,6 +1,8 @@
 import NextAuth from 'next-auth'
 import DiscordProvider from 'next-auth/providers/discord'
 import { upsertUserFromTokenInDB } from '../../../src/util/UserUtil'
+import { hasuraRole } from '../../../src/config/serverConfig'
+import jwt from 'jsonwebtoken'
 
 export default NextAuth({
   providers: [
@@ -18,6 +20,15 @@ export default NextAuth({
   callbacks: {
     async session({ session, token }) {
       session.userId = token.userId
+      if (token.sub) {
+        session.providerId = token.sub
+      }
+      // Encoded jwt is needed for the hasura authorization on the client side
+      const encodedJwt = jwt.sign(token, process.env.NEXTAUTH_SECRET, {
+        algorithm: 'HS256',
+      })
+
+      session.encodedJwt = encodedJwt
 
       return session
     },
@@ -32,6 +43,14 @@ export default NextAuth({
           throw new Error('Could not upsert user in db!')
         }
         token.userId = uspertResult
+
+        // Claims needed for authorization in Hasura
+        token['https://hasura.io/jwt/claims'] = {
+          'x-hasura-allowed-roles': [hasuraRole],
+          'x-hasura-default-role': hasuraRole,
+          'x-hasura-role': hasuraRole,
+          'x-hasura-user-id': uspertResult.toString(),
+        }
       }
 
       return token

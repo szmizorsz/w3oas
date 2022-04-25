@@ -205,11 +205,12 @@ export type Subscription_RootUser_By_PkArgs = {
 /** columns and relationships of "user" */
 export type User = {
   __typename?: 'user';
-  discord_avatar: Scalars['String'];
-  discord_email: Scalars['String'];
+  discord_avatar?: Maybe<Scalars['String']>;
+  discord_email?: Maybe<Scalars['String']>;
   discord_id: Scalars['String'];
-  discord_user_name: Scalars['String'];
+  discord_user_name?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
+  wallet_address?: Maybe<Scalars['String']>;
 };
 
 /** aggregated selection of "user" */
@@ -258,6 +259,7 @@ export type User_Bool_Exp = {
   discord_id?: InputMaybe<String_Comparison_Exp>;
   discord_user_name?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
+  wallet_address?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "user" */
@@ -265,7 +267,9 @@ export enum User_Constraint {
   /** unique or primary key constraint */
   UserDiscordIdKey = 'user_discord_id_key',
   /** unique or primary key constraint */
-  UserPkey = 'user_pkey'
+  UserPkey = 'user_pkey',
+  /** unique or primary key constraint */
+  UserWalletAddressKey = 'user_wallet_address_key'
 }
 
 /** input type for incrementing numeric columns in table "user" */
@@ -280,6 +284,7 @@ export type User_Insert_Input = {
   discord_id?: InputMaybe<Scalars['String']>;
   discord_user_name?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
+  wallet_address?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
@@ -290,6 +295,7 @@ export type User_Max_Fields = {
   discord_id?: Maybe<Scalars['String']>;
   discord_user_name?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  wallet_address?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
@@ -300,6 +306,7 @@ export type User_Min_Fields = {
   discord_id?: Maybe<Scalars['String']>;
   discord_user_name?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
+  wallet_address?: Maybe<Scalars['String']>;
 };
 
 /** response of any mutation on the table "user" */
@@ -325,6 +332,7 @@ export type User_Order_By = {
   discord_id?: InputMaybe<Order_By>;
   discord_user_name?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  wallet_address?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: user */
@@ -343,7 +351,9 @@ export enum User_Select_Column {
   /** column name */
   DiscordUserName = 'discord_user_name',
   /** column name */
-  Id = 'id'
+  Id = 'id',
+  /** column name */
+  WalletAddress = 'wallet_address'
 }
 
 /** input type for updating data in table "user" */
@@ -353,6 +363,7 @@ export type User_Set_Input = {
   discord_id?: InputMaybe<Scalars['String']>;
   discord_user_name?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
+  wallet_address?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -390,7 +401,9 @@ export enum User_Update_Column {
   /** column name */
   DiscordUserName = 'discord_user_name',
   /** column name */
-  Id = 'id'
+  Id = 'id',
+  /** column name */
+  WalletAddress = 'wallet_address'
 }
 
 /** aggregate var_pop on columns */
@@ -420,6 +433,14 @@ export type UpsertUserMutationVariables = Exact<{
 
 
 export type UpsertUserMutation = { __typename?: 'mutation_root', insert_user_one?: { __typename?: 'user', id: number } | null };
+
+export type UpdateWalletForUserByIdMutationVariables = Exact<{
+  user_id: Scalars['Int'];
+  address: Scalars['String'];
+}>;
+
+
+export type UpdateWalletForUserByIdMutation = { __typename?: 'mutation_root', update_user_by_pk?: { __typename?: 'user', wallet_address?: string | null } | null };
 
 
 export const UpsertUserDocument = gql`
@@ -461,3 +482,37 @@ export function useUpsertUserMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpsertUserMutationHookResult = ReturnType<typeof useUpsertUserMutation>;
 export type UpsertUserMutationResult = Apollo.MutationResult<UpsertUserMutation>;
 export type UpsertUserMutationOptions = Apollo.BaseMutationOptions<UpsertUserMutation, UpsertUserMutationVariables>;
+export const UpdateWalletForUserByIdDocument = gql`
+    mutation UpdateWalletForUserById($user_id: Int!, $address: String!) {
+  update_user_by_pk(pk_columns: {id: $user_id}, _set: {wallet_address: $address}) {
+    wallet_address
+  }
+}
+    `;
+export type UpdateWalletForUserByIdMutationFn = Apollo.MutationFunction<UpdateWalletForUserByIdMutation, UpdateWalletForUserByIdMutationVariables>;
+
+/**
+ * __useUpdateWalletForUserByIdMutation__
+ *
+ * To run a mutation, you first call `useUpdateWalletForUserByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateWalletForUserByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateWalletForUserByIdMutation, { data, loading, error }] = useUpdateWalletForUserByIdMutation({
+ *   variables: {
+ *      user_id: // value for 'user_id'
+ *      address: // value for 'address'
+ *   },
+ * });
+ */
+export function useUpdateWalletForUserByIdMutation(baseOptions?: Apollo.MutationHookOptions<UpdateWalletForUserByIdMutation, UpdateWalletForUserByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateWalletForUserByIdMutation, UpdateWalletForUserByIdMutationVariables>(UpdateWalletForUserByIdDocument, options);
+      }
+export type UpdateWalletForUserByIdMutationHookResult = ReturnType<typeof useUpdateWalletForUserByIdMutation>;
+export type UpdateWalletForUserByIdMutationResult = Apollo.MutationResult<UpdateWalletForUserByIdMutation>;
+export type UpdateWalletForUserByIdMutationOptions = Apollo.BaseMutationOptions<UpdateWalletForUserByIdMutation, UpdateWalletForUserByIdMutationVariables>;

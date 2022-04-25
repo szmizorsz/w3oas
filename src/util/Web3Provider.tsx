@@ -10,19 +10,23 @@ import type { Web3Auth, Web3AuthOptions } from '@web3auth/web3auth'
 export interface IWeb3Context {
   web3Provider: ethers.providers.Web3Provider | null
   web3Loading: boolean
-  connectWallet: () => Promise<void>
+  connectWallet: () => Promise<string[] | undefined>
   disconnectWallet: () => Promise<void>
   getUserInfo: () => Promise<void>
-  getAccounts: () => Promise<void>
+  getAccounts: () => Promise<string[] | undefined>
 }
 
 export const Web3Context = createContext<IWeb3Context>({
   web3Provider: null,
   web3Loading: false,
-  connectWallet: async () => {},
+  connectWallet: async () => {
+    return []
+  },
   disconnectWallet: async () => {},
   getUserInfo: async () => {},
-  getAccounts: async () => {},
+  getAccounts: async () => {
+    return []
+  },
 })
 
 export function useWeb3(): IWeb3Context {
@@ -90,7 +94,10 @@ export const Web3Provider: React.FC<Props> = ({ children }) => {
       console.log('web3provider not initialized')
       return
     }
-    setWeb3Provider(new ethers.providers.Web3Provider(provider))
+    const web3ProviderFromWeb3Auth = new ethers.providers.Web3Provider(provider)
+    const accounts = await web3ProviderFromWeb3Auth.listAccounts()
+    setWeb3Provider(web3ProviderFromWeb3Auth)
+    return accounts
   }
 
   const getUserInfo = async () => {
@@ -118,7 +125,8 @@ export const Web3Provider: React.FC<Props> = ({ children }) => {
     }
     try {
       const accounts = await web3Provider.listAccounts()
-      console.log('User account', accounts)
+      console.log('accounts ' + accounts)
+      return accounts
     } catch (error: unknown) {
       console.error((error as Error).message)
       throw error

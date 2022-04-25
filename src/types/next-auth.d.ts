@@ -6,6 +6,8 @@ import 'next-auth/jwt'
 declare module 'next-auth' {
   interface Session {
     userId: number
+    providerId: string
+    encodedJwt: string
   }
 }
 

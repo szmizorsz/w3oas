@@ -265,6 +265,7 @@ type user {
   discord_id: String!
   discord_user_name: String
   id: Int!
+  wallet_address: String
 }
 
 """
@@ -309,6 +310,7 @@ input user_bool_exp {
   discord_id: String_comparison_exp
   discord_user_name: String_comparison_exp
   id: Int_comparison_exp
+  wallet_address: String_comparison_exp
 }
 
 """
@@ -320,6 +322,9 @@ enum user_constraint {
 
   """unique or primary key constraint"""
   user_pkey
+
+  """unique or primary key constraint"""
+  user_wallet_address_key
 }
 
 """
@@ -338,6 +343,7 @@ input user_insert_input {
   discord_id: String
   discord_user_name: String
   id: Int
+  wallet_address: String
 }
 
 """aggregate max on columns"""
@@ -347,6 +353,7 @@ type user_max_fields {
   discord_id: String
   discord_user_name: String
   id: Int
+  wallet_address: String
 }
 
 """aggregate min on columns"""
@@ -356,6 +363,7 @@ type user_min_fields {
   discord_id: String
   discord_user_name: String
   id: Int
+  wallet_address: String
 }
 
 """
@@ -385,6 +393,7 @@ input user_order_by {
   discord_id: order_by
   discord_user_name: order_by
   id: order_by
+  wallet_address: order_by
 }
 
 """primary key columns input for table: user"""
@@ -410,6 +419,9 @@ enum user_select_column {
 
   """column name"""
   id
+
+  """column name"""
+  wallet_address
 }
 
 """
@@ -421,6 +433,7 @@ input user_set_input {
   discord_id: String
   discord_user_name: String
   id: Int
+  wallet_address: String
 }
 
 """aggregate stddev on columns"""
@@ -461,6 +474,9 @@ enum user_update_column {
 
   """column name"""
   id
+
+  """column name"""
+  wallet_address
 }
 
 """aggregate var_pop on columns"""
