@@ -5,7 +5,7 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
 import AvailableCommunities from '../src/components/availableCommunities'
 
-const Home: NextPage = () => {
+const Community: NextPage = () => {
   const { data: session, status } = useSession()
   const sessionLoading = status === 'loading'
 
@@ -36,4 +36,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Community

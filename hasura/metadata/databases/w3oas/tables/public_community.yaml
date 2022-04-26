@@ -8,7 +8,9 @@ object_relationships:
 insert_permissions:
   - role: member
     permission:
-      check: {}
+      check:
+        owner_id:
+          _eq: X-Hasura-User-Id
       columns:
         - id
         - owner_id
@@ -39,5 +41,13 @@ update_permissions:
         - discord_id
         - icon
         - name
-      filter: {}
+      filter:
+        owner_id:
+          _eq: X-Hasura-User-Id
       check: {}
+delete_permissions:
+  - role: member
+    permission:
+      filter:
+        owner_id:
+          _eq: X-Hasura-User-Id

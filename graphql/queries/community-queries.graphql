@@ -18,3 +18,29 @@ fragment CommunityFields on community {
     discord_avatar
   }
 }
+
+query getCommunityById($id: Int!) {
+  community_by_pk(id: $id) {
+    ...CommunityFields
+  }
+}
+
+mutation UpdateCommunityById(
+  $id: Int!
+  $name: String
+  $description: String
+  $icon: String
+) {
+  update_community_by_pk(
+    pk_columns: { id: $id }
+    _set: { description: $description, icon: $icon, name: $name }
+  ) {
+    id
+  }
+}
+
+mutation DeleteCommunityById($id: Int!) {
+  delete_community_by_pk(id: $id) {
+    id
+  }
+}

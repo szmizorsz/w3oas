@@ -782,6 +782,30 @@ export type AvailableCommunitiesQuery = { __typename?: 'query_root', community: 
 
 export type CommunityFieldsFragment = { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null } };
 
+export type GetCommunityByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetCommunityByIdQuery = { __typename?: 'query_root', community_by_pk?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null } } | null };
+
+export type UpdateCommunityByIdMutationVariables = Exact<{
+  id: Scalars['Int'];
+  name?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  icon?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UpdateCommunityByIdMutation = { __typename?: 'mutation_root', update_community_by_pk?: { __typename?: 'community', id: number } | null };
+
+export type DeleteCommunityByIdMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteCommunityByIdMutation = { __typename?: 'mutation_root', delete_community_by_pk?: { __typename?: 'community', id: number } | null };
+
 export type UpsertUserMutationVariables = Exact<{
   discord_id: Scalars['String'];
   discord_email?: InputMaybe<Scalars['String']>;
@@ -850,6 +874,113 @@ export function useAvailableCommunitiesLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type AvailableCommunitiesQueryHookResult = ReturnType<typeof useAvailableCommunitiesQuery>;
 export type AvailableCommunitiesLazyQueryHookResult = ReturnType<typeof useAvailableCommunitiesLazyQuery>;
 export type AvailableCommunitiesQueryResult = Apollo.QueryResult<AvailableCommunitiesQuery, AvailableCommunitiesQueryVariables>;
+export const GetCommunityByIdDocument = gql`
+    query getCommunityById($id: Int!) {
+  community_by_pk(id: $id) {
+    ...CommunityFields
+  }
+}
+    ${CommunityFieldsFragmentDoc}`;
+
+/**
+ * __useGetCommunityByIdQuery__
+ *
+ * To run a query within a React component, call `useGetCommunityByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCommunityByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCommunityByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCommunityByIdQuery(baseOptions: Apollo.QueryHookOptions<GetCommunityByIdQuery, GetCommunityByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCommunityByIdQuery, GetCommunityByIdQueryVariables>(GetCommunityByIdDocument, options);
+      }
+export function useGetCommunityByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCommunityByIdQuery, GetCommunityByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCommunityByIdQuery, GetCommunityByIdQueryVariables>(GetCommunityByIdDocument, options);
+        }
+export type GetCommunityByIdQueryHookResult = ReturnType<typeof useGetCommunityByIdQuery>;
+export type GetCommunityByIdLazyQueryHookResult = ReturnType<typeof useGetCommunityByIdLazyQuery>;
+export type GetCommunityByIdQueryResult = Apollo.QueryResult<GetCommunityByIdQuery, GetCommunityByIdQueryVariables>;
+export const UpdateCommunityByIdDocument = gql`
+    mutation UpdateCommunityById($id: Int!, $name: String, $description: String, $icon: String) {
+  update_community_by_pk(
+    pk_columns: {id: $id}
+    _set: {description: $description, icon: $icon, name: $name}
+  ) {
+    id
+  }
+}
+    `;
+export type UpdateCommunityByIdMutationFn = Apollo.MutationFunction<UpdateCommunityByIdMutation, UpdateCommunityByIdMutationVariables>;
+
+/**
+ * __useUpdateCommunityByIdMutation__
+ *
+ * To run a mutation, you first call `useUpdateCommunityByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCommunityByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCommunityByIdMutation, { data, loading, error }] = useUpdateCommunityByIdMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      description: // value for 'description'
+ *      icon: // value for 'icon'
+ *   },
+ * });
+ */
+export function useUpdateCommunityByIdMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCommunityByIdMutation, UpdateCommunityByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCommunityByIdMutation, UpdateCommunityByIdMutationVariables>(UpdateCommunityByIdDocument, options);
+      }
+export type UpdateCommunityByIdMutationHookResult = ReturnType<typeof useUpdateCommunityByIdMutation>;
+export type UpdateCommunityByIdMutationResult = Apollo.MutationResult<UpdateCommunityByIdMutation>;
+export type UpdateCommunityByIdMutationOptions = Apollo.BaseMutationOptions<UpdateCommunityByIdMutation, UpdateCommunityByIdMutationVariables>;
+export const DeleteCommunityByIdDocument = gql`
+    mutation DeleteCommunityById($id: Int!) {
+  delete_community_by_pk(id: $id) {
+    id
+  }
+}
+    `;
+export type DeleteCommunityByIdMutationFn = Apollo.MutationFunction<DeleteCommunityByIdMutation, DeleteCommunityByIdMutationVariables>;
+
+/**
+ * __useDeleteCommunityByIdMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommunityByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommunityByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommunityByIdMutation, { data, loading, error }] = useDeleteCommunityByIdMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCommunityByIdMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommunityByIdMutation, DeleteCommunityByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCommunityByIdMutation, DeleteCommunityByIdMutationVariables>(DeleteCommunityByIdDocument, options);
+      }
+export type DeleteCommunityByIdMutationHookResult = ReturnType<typeof useDeleteCommunityByIdMutation>;
+export type DeleteCommunityByIdMutationResult = Apollo.MutationResult<DeleteCommunityByIdMutation>;
+export type DeleteCommunityByIdMutationOptions = Apollo.BaseMutationOptions<DeleteCommunityByIdMutation, DeleteCommunityByIdMutationVariables>;
 export const UpsertUserDocument = gql`
     mutation upsertUser($discord_id: String!, $discord_email: String, $discord_user_name: String, $discord_avatar: String) {
   insert_user_one(

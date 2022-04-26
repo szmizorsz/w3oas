@@ -38,7 +38,6 @@ export default function CommunityCard({ community }: Props) {
                 )}
               </GridItem>
             </Center>
-
             <GridItem colSpan={9}>
               <Grid templateColumns="repeat(10, 1fr)" gap={6}>
                 <GridItem colSpan={8}>
