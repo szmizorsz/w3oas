@@ -34,7 +34,6 @@ export default function Header() {
   if (sessionLoading || web3Loading) return <p>Loading...</p>
 
   const connectWalletAndSaveToDB = async () => {
-    console.log('jwt ' + session?.encodedJwt)
     const accounts = await connectWallet()
     if (!session?.userId) {
       throw Error('UserId is not defined in the session')
@@ -68,6 +67,11 @@ export default function Header() {
       <Box pr="10">
         {session?.user && (
           <HStack spacing="45">
+            <Box>
+              <Link href="/community" passHref>
+                <ChakraLink>Community</ChakraLink>
+              </Link>
+            </Box>
             <Box>
               {web3Provider ? (
                 <Button

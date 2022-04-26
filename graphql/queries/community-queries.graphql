@@ -1,0 +1,20 @@
+query AvailableCommunities {
+  community {
+    ...CommunityFields
+  }
+}
+
+fragment CommunityFields on community {
+  description
+  discord_id
+  icon
+  id
+  name
+  owner {
+    id
+    discord_id
+    discord_email
+    discord_user_name
+    discord_avatar
+  }
+}

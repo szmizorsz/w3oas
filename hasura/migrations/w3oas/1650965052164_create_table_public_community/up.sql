@@ -1,0 +1,1 @@
+CREATE TABLE "public"."community" ("id" serial NOT NULL, "name" text NOT NULL, "description" text, "owner_id" integer NOT NULL, "discord_id" text NOT NULL, "icon" text, PRIMARY KEY ("id") , FOREIGN KEY ("owner_id") REFERENCES "public"."user"("id") ON UPDATE restrict ON DELETE restrict);

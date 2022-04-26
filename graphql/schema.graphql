@@ -81,8 +81,268 @@ input String_comparison_exp {
   _similar: String
 }
 
+"""
+columns and relationships of "community"
+"""
+type community {
+  description: String
+  discord_id: String!
+  icon: String
+  id: Int!
+  name: String!
+
+  """An object relationship"""
+  owner: user!
+  owner_id: Int!
+}
+
+"""
+aggregated selection of "community"
+"""
+type community_aggregate {
+  aggregate: community_aggregate_fields
+  nodes: [community!]!
+}
+
+"""
+aggregate fields of "community"
+"""
+type community_aggregate_fields {
+  avg: community_avg_fields
+  count(columns: [community_select_column!], distinct: Boolean): Int!
+  max: community_max_fields
+  min: community_min_fields
+  stddev: community_stddev_fields
+  stddev_pop: community_stddev_pop_fields
+  stddev_samp: community_stddev_samp_fields
+  sum: community_sum_fields
+  var_pop: community_var_pop_fields
+  var_samp: community_var_samp_fields
+  variance: community_variance_fields
+}
+
+"""aggregate avg on columns"""
+type community_avg_fields {
+  id: Float
+  owner_id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "community". All fields are combined with a logical 'AND'.
+"""
+input community_bool_exp {
+  _and: [community_bool_exp!]
+  _not: community_bool_exp
+  _or: [community_bool_exp!]
+  description: String_comparison_exp
+  discord_id: String_comparison_exp
+  icon: String_comparison_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+  owner: user_bool_exp
+  owner_id: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "community"
+"""
+enum community_constraint {
+  """unique or primary key constraint"""
+  community_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "community"
+"""
+input community_inc_input {
+  id: Int
+  owner_id: Int
+}
+
+"""
+input type for inserting data into table "community"
+"""
+input community_insert_input {
+  description: String
+  discord_id: String
+  icon: String
+  id: Int
+  name: String
+  owner: user_obj_rel_insert_input
+  owner_id: Int
+}
+
+"""aggregate max on columns"""
+type community_max_fields {
+  description: String
+  discord_id: String
+  icon: String
+  id: Int
+  name: String
+  owner_id: Int
+}
+
+"""aggregate min on columns"""
+type community_min_fields {
+  description: String
+  discord_id: String
+  icon: String
+  id: Int
+  name: String
+  owner_id: Int
+}
+
+"""
+response of any mutation on the table "community"
+"""
+type community_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [community!]!
+}
+
+"""
+on_conflict condition type for table "community"
+"""
+input community_on_conflict {
+  constraint: community_constraint!
+  update_columns: [community_update_column!]! = []
+  where: community_bool_exp
+}
+
+"""Ordering options when selecting data from "community"."""
+input community_order_by {
+  description: order_by
+  discord_id: order_by
+  icon: order_by
+  id: order_by
+  name: order_by
+  owner: user_order_by
+  owner_id: order_by
+}
+
+"""primary key columns input for table: community"""
+input community_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "community"
+"""
+enum community_select_column {
+  """column name"""
+  description
+
+  """column name"""
+  discord_id
+
+  """column name"""
+  icon
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  owner_id
+}
+
+"""
+input type for updating data in table "community"
+"""
+input community_set_input {
+  description: String
+  discord_id: String
+  icon: String
+  id: Int
+  name: String
+  owner_id: Int
+}
+
+"""aggregate stddev on columns"""
+type community_stddev_fields {
+  id: Float
+  owner_id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type community_stddev_pop_fields {
+  id: Float
+  owner_id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type community_stddev_samp_fields {
+  id: Float
+  owner_id: Float
+}
+
+"""aggregate sum on columns"""
+type community_sum_fields {
+  id: Int
+  owner_id: Int
+}
+
+"""
+update columns of table "community"
+"""
+enum community_update_column {
+  """column name"""
+  description
+
+  """column name"""
+  discord_id
+
+  """column name"""
+  icon
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  owner_id
+}
+
+"""aggregate var_pop on columns"""
+type community_var_pop_fields {
+  id: Float
+  owner_id: Float
+}
+
+"""aggregate var_samp on columns"""
+type community_var_samp_fields {
+  id: Float
+  owner_id: Float
+}
+
+"""aggregate variance on columns"""
+type community_variance_fields {
+  id: Float
+  owner_id: Float
+}
+
 """mutation root"""
 type mutation_root {
+  """
+  delete data from the table: "community"
+  """
+  delete_community(
+    """filter the rows which have to be deleted"""
+    where: community_bool_exp!
+  ): community_mutation_response
+
+  """
+  delete single row from the table: "community"
+  """
+  delete_community_by_pk(id: Int!): community
+
   """
   delete data from the table: "user"
   """
@@ -95,6 +355,28 @@ type mutation_root {
   delete single row from the table: "user"
   """
   delete_user_by_pk(id: Int!): user
+
+  """
+  insert data into the table: "community"
+  """
+  insert_community(
+    """the rows to be inserted"""
+    objects: [community_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: community_on_conflict
+  ): community_mutation_response
+
+  """
+  insert a single row into the table: "community"
+  """
+  insert_community_one(
+    """the row to be inserted"""
+    object: community_insert_input!
+
+    """upsert condition"""
+    on_conflict: community_on_conflict
+  ): community
 
   """
   insert data into the table: "user"
@@ -117,6 +399,32 @@ type mutation_root {
     """upsert condition"""
     on_conflict: user_on_conflict
   ): user
+
+  """
+  update data of the table: "community"
+  """
+  update_community(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: community_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: community_set_input
+
+    """filter the rows which have to be updated"""
+    where: community_bool_exp!
+  ): community_mutation_response
+
+  """
+  update single row of the table: "community"
+  """
+  update_community_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: community_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: community_set_input
+    pk_columns: community_pk_columns_input!
+  ): community
 
   """
   update data of the table: "user"
@@ -168,6 +476,49 @@ enum order_by {
 
 type query_root {
   """
+  fetch data from the table: "community"
+  """
+  community(
+    """distinct select on columns"""
+    distinct_on: [community_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [community_order_by!]
+
+    """filter the rows returned"""
+    where: community_bool_exp
+  ): [community!]!
+
+  """
+  fetch aggregated fields from the table: "community"
+  """
+  community_aggregate(
+    """distinct select on columns"""
+    distinct_on: [community_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [community_order_by!]
+
+    """filter the rows returned"""
+    where: community_bool_exp
+  ): community_aggregate!
+
+  """fetch data from the table: "community" using primary key columns"""
+  community_by_pk(id: Int!): community
+
+  """
   fetch data from the table: "user"
   """
   user(
@@ -212,6 +563,49 @@ type query_root {
 }
 
 type subscription_root {
+  """
+  fetch data from the table: "community"
+  """
+  community(
+    """distinct select on columns"""
+    distinct_on: [community_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [community_order_by!]
+
+    """filter the rows returned"""
+    where: community_bool_exp
+  ): [community!]!
+
+  """
+  fetch aggregated fields from the table: "community"
+  """
+  community_aggregate(
+    """distinct select on columns"""
+    distinct_on: [community_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [community_order_by!]
+
+    """filter the rows returned"""
+    where: community_bool_exp
+  ): community_aggregate!
+
+  """fetch data from the table: "community" using primary key columns"""
+  community_by_pk(id: Int!): community
+
   """
   fetch data from the table: "user"
   """
@@ -375,6 +769,16 @@ type user_mutation_response {
 
   """data from the rows affected by the mutation"""
   returning: [user!]!
+}
+
+"""
+input type for inserting object relation for remote table "user"
+"""
+input user_obj_rel_insert_input {
+  data: user_insert_input!
+
+  """upsert condition"""
+  on_conflict: user_on_conflict
 }
 
 """

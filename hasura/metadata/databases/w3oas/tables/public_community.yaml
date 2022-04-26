@@ -1,0 +1,43 @@
+table:
+  schema: public
+  name: community
+object_relationships:
+  - name: owner
+    using:
+      foreign_key_constraint_on: owner_id
+insert_permissions:
+  - role: member
+    permission:
+      check: {}
+      columns:
+        - id
+        - owner_id
+        - description
+        - discord_id
+        - icon
+        - name
+      backend_only: false
+select_permissions:
+  - role: member
+    permission:
+      columns:
+        - id
+        - owner_id
+        - description
+        - discord_id
+        - icon
+        - name
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: member
+    permission:
+      columns:
+        - id
+        - owner_id
+        - description
+        - discord_id
+        - icon
+        - name
+      filter: {}
+      check: {}
