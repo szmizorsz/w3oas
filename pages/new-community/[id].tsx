@@ -2,23 +2,21 @@ import type { NextPage } from 'next'
 import Layout from '../../src/components/layout'
 import ApolloProviderWithAuth from '../../src/components/apolloProviderWithAuth'
 import { useRouter } from 'next/router'
-import CommunityDetail from '../../src/components/communityDetail'
+import NewCommunity from '../../src/components/newCommunity'
 
-const Communities: NextPage = () => {
+const NewCommunityPage: NextPage = () => {
   const router = useRouter()
   const { id } = router.query
 
   if (!id) return <p>There is no id passed</p>
 
-  debugger
-
   return (
     <ApolloProviderWithAuth>
       <Layout>
-        <CommunityDetail id={Number(id)} />
+        <NewCommunity id={id as string} />
       </Layout>
     </ApolloProviderWithAuth>
   )
 }
 
-export default Communities
+export default NewCommunityPage

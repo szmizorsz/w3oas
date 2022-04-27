@@ -44,3 +44,29 @@ mutation DeleteCommunityById($id: Int!) {
     id
   }
 }
+
+mutation InsertCommunity(
+  $description: String
+  $discord_id: String!
+  $name: String!
+  $icon: String
+  $owner_id: Int!
+) {
+  insert_community_one(
+    object: {
+      description: $description
+      discord_id: $discord_id
+      icon: $icon
+      name: $name
+      owner_id: $owner_id
+    }
+  ) {
+    ...CommunityFields
+  }
+}
+
+query GetExistingCommunitiesByDiscordIds($discord_ids: [String!]) {
+  community(where: { discord_id: { _in: $discord_ids } }) {
+    ...CommunityFields
+  }
+}

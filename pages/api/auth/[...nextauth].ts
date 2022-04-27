@@ -3,6 +3,7 @@ import DiscordProvider from 'next-auth/providers/discord'
 import { upsertUserFromTokenInDB } from '../../../src/util/UserUtil'
 import { hasuraRole } from '../../../src/config/serverConfig'
 import jwt from 'jsonwebtoken'
+import { getGuildsFromDiscord } from '../../../src/util/DiscordUtil'
 
 export default NextAuth({
   providers: [
@@ -28,6 +29,7 @@ export default NextAuth({
         algorithm: 'HS256',
       })
 
+      session.guilds = token.guilds
       session.encodedJwt = encodedJwt
 
       return session
@@ -43,6 +45,13 @@ export default NextAuth({
           throw new Error('Could not upsert user in db!')
         }
         token.userId = uspertResult
+
+        if (account.access_token) {
+          const guilds = await getGuildsFromDiscord(account.access_token)
+          if (guilds) {
+            token.guilds = guilds
+          }
+        }
 
         // Claims needed for authorization in Hasura
         token['https://hasura.io/jwt/claims'] = {

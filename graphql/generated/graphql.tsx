@@ -806,6 +806,24 @@ export type DeleteCommunityByIdMutationVariables = Exact<{
 
 export type DeleteCommunityByIdMutation = { __typename?: 'mutation_root', delete_community_by_pk?: { __typename?: 'community', id: number } | null };
 
+export type InsertCommunityMutationVariables = Exact<{
+  description?: InputMaybe<Scalars['String']>;
+  discord_id: Scalars['String'];
+  name: Scalars['String'];
+  icon?: InputMaybe<Scalars['String']>;
+  owner_id: Scalars['Int'];
+}>;
+
+
+export type InsertCommunityMutation = { __typename?: 'mutation_root', insert_community_one?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null } } | null };
+
+export type GetExistingCommunitiesByDiscordIdsQueryVariables = Exact<{
+  discord_ids?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+
+export type GetExistingCommunitiesByDiscordIdsQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null } }> };
+
 export type UpsertUserMutationVariables = Exact<{
   discord_id: Scalars['String'];
   discord_email?: InputMaybe<Scalars['String']>;
@@ -981,6 +999,80 @@ export function useDeleteCommunityByIdMutation(baseOptions?: Apollo.MutationHook
 export type DeleteCommunityByIdMutationHookResult = ReturnType<typeof useDeleteCommunityByIdMutation>;
 export type DeleteCommunityByIdMutationResult = Apollo.MutationResult<DeleteCommunityByIdMutation>;
 export type DeleteCommunityByIdMutationOptions = Apollo.BaseMutationOptions<DeleteCommunityByIdMutation, DeleteCommunityByIdMutationVariables>;
+export const InsertCommunityDocument = gql`
+    mutation InsertCommunity($description: String, $discord_id: String!, $name: String!, $icon: String, $owner_id: Int!) {
+  insert_community_one(
+    object: {description: $description, discord_id: $discord_id, icon: $icon, name: $name, owner_id: $owner_id}
+  ) {
+    ...CommunityFields
+  }
+}
+    ${CommunityFieldsFragmentDoc}`;
+export type InsertCommunityMutationFn = Apollo.MutationFunction<InsertCommunityMutation, InsertCommunityMutationVariables>;
+
+/**
+ * __useInsertCommunityMutation__
+ *
+ * To run a mutation, you first call `useInsertCommunityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertCommunityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertCommunityMutation, { data, loading, error }] = useInsertCommunityMutation({
+ *   variables: {
+ *      description: // value for 'description'
+ *      discord_id: // value for 'discord_id'
+ *      name: // value for 'name'
+ *      icon: // value for 'icon'
+ *      owner_id: // value for 'owner_id'
+ *   },
+ * });
+ */
+export function useInsertCommunityMutation(baseOptions?: Apollo.MutationHookOptions<InsertCommunityMutation, InsertCommunityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertCommunityMutation, InsertCommunityMutationVariables>(InsertCommunityDocument, options);
+      }
+export type InsertCommunityMutationHookResult = ReturnType<typeof useInsertCommunityMutation>;
+export type InsertCommunityMutationResult = Apollo.MutationResult<InsertCommunityMutation>;
+export type InsertCommunityMutationOptions = Apollo.BaseMutationOptions<InsertCommunityMutation, InsertCommunityMutationVariables>;
+export const GetExistingCommunitiesByDiscordIdsDocument = gql`
+    query GetExistingCommunitiesByDiscordIds($discord_ids: [String!]) {
+  community(where: {discord_id: {_in: $discord_ids}}) {
+    ...CommunityFields
+  }
+}
+    ${CommunityFieldsFragmentDoc}`;
+
+/**
+ * __useGetExistingCommunitiesByDiscordIdsQuery__
+ *
+ * To run a query within a React component, call `useGetExistingCommunitiesByDiscordIdsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExistingCommunitiesByDiscordIdsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExistingCommunitiesByDiscordIdsQuery({
+ *   variables: {
+ *      discord_ids: // value for 'discord_ids'
+ *   },
+ * });
+ */
+export function useGetExistingCommunitiesByDiscordIdsQuery(baseOptions?: Apollo.QueryHookOptions<GetExistingCommunitiesByDiscordIdsQuery, GetExistingCommunitiesByDiscordIdsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetExistingCommunitiesByDiscordIdsQuery, GetExistingCommunitiesByDiscordIdsQueryVariables>(GetExistingCommunitiesByDiscordIdsDocument, options);
+      }
+export function useGetExistingCommunitiesByDiscordIdsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExistingCommunitiesByDiscordIdsQuery, GetExistingCommunitiesByDiscordIdsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetExistingCommunitiesByDiscordIdsQuery, GetExistingCommunitiesByDiscordIdsQueryVariables>(GetExistingCommunitiesByDiscordIdsDocument, options);
+        }
+export type GetExistingCommunitiesByDiscordIdsQueryHookResult = ReturnType<typeof useGetExistingCommunitiesByDiscordIdsQuery>;
+export type GetExistingCommunitiesByDiscordIdsLazyQueryHookResult = ReturnType<typeof useGetExistingCommunitiesByDiscordIdsLazyQuery>;
+export type GetExistingCommunitiesByDiscordIdsQueryResult = Apollo.QueryResult<GetExistingCommunitiesByDiscordIdsQuery, GetExistingCommunitiesByDiscordIdsQueryVariables>;
 export const UpsertUserDocument = gql`
     mutation upsertUser($discord_id: String!, $discord_email: String, $discord_user_name: String, $discord_avatar: String) {
   insert_user_one(

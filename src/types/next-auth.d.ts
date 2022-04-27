@@ -8,6 +8,14 @@ declare module 'next-auth' {
     userId: number
     providerId: string
     encodedJwt: string
+    guilds: Guild[]
+  }
+
+  interface Guild {
+    id: string
+    name: string
+    icon: string
+    owner: boolean
   }
 }
 
@@ -16,5 +24,6 @@ declare module 'next-auth/jwt' {
     /** The user's role. */
     userRole?: 'admin'
     userId: number
+    guilds: Guild[]
   }
 }

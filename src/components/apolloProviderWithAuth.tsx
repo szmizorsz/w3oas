@@ -1,51 +1,51 @@
-import {useSession} from 'next-auth/react';
+import { useSession } from 'next-auth/react'
 import {
   ApolloProvider,
   ApolloClient,
   createHttpLink,
-  InMemoryCache
-} from '@apollo/client';
-import {setContext} from '@apollo/client/link/context';
+  InMemoryCache,
+} from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 
-import type {Session} from 'next-auth';
+import type { Session } from 'next-auth'
 
 interface ApolloProviderWithAuthProps {
   children: React.ReactNode
 }
 
-const memoryCache = new InMemoryCache();
+const memoryCache = new InMemoryCache()
 
-export function getApolloClient (session?: Session | null) {
+export function getApolloClient(session?: Session | null) {
   const httpLink = createHttpLink({
-    uri: process.env.NEXT_PUBLIC_GRAPHQL_URL
-  });
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
+  })
 
-  const authLink = setContext((_, {headers}) => {
+  const authLink = setContext((_, { headers }) => {
     return {
       headers: {
         ...headers,
-        authorization: session ? `Bearer ${session.encodedJwt}` : ''
-      }
-    };
-  });
+        authorization: session ? `Bearer ${session.encodedJwt}` : '',
+      },
+    }
+  })
 
   const client = new ApolloClient({
     link: authLink.concat(httpLink),
-    cache: memoryCache
-  });
+    cache: memoryCache,
+  })
 
-  return client;
+  return client
 }
 
-export default function ApolloProviderWithAuth ({
-  children
+export default function ApolloProviderWithAuth({
+  children,
 }: ApolloProviderWithAuthProps) {
-  const {data: session, status} = useSession();
-  const sessionLoading = status === 'loading';
+  const { data: session, status } = useSession()
+  const sessionLoading = status === 'loading'
 
-  if (sessionLoading) return <p>Loading...</p>;
+  if (sessionLoading) return <p>Session loading...</p>
 
-  const client = getApolloClient(session);
+  const client = getApolloClient(session)
 
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  return <ApolloProvider client={client}>{children}</ApolloProvider>
 }

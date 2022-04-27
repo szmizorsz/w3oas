@@ -31,7 +31,8 @@ export default function Header() {
   const { data: session, status } = useSession()
   const sessionLoading = status === 'loading'
 
-  if (sessionLoading || web3Loading) return <p>Loading...</p>
+  if (sessionLoading) return <p>Session loading...</p>
+  if (web3Loading) return <p>Web3 loading...</p>
 
   const connectWalletAndSaveToDB = async () => {
     const accounts = await connectWallet()

@@ -4,6 +4,8 @@ import ApolloProviderWithAuth from '../src/components/apolloProviderWithAuth'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
 import AvailableCommunities from '../src/components/availableCommunities'
+import { Grid, GridItem, Flex, Spacer, Box } from '@chakra-ui/react'
+import CreateCommunityButtonAndModal from '../src/components/createCommunityButtonAndModal'
 
 const Community: NextPage = () => {
   const { data: session, status } = useSession()
@@ -16,10 +18,21 @@ const Community: NextPage = () => {
       <Layout>
         {session && (
           <Tabs variant="enclosed">
-            <TabList>
-              <Tab>Available communities</Tab>
-              <Tab>My communities</Tab>
-            </TabList>
+            <Grid templateColumns="repeat(10, 1fr)" gap={6}>
+              <GridItem colSpan={8}>
+                <TabList>
+                  <Tab>Available communities</Tab>
+                  <Tab>My communities</Tab>
+                </TabList>
+              </GridItem>
+              <GridItem colSpan={2} placeItems="start">
+                <Flex>
+                  <Box></Box>
+                  <Spacer />
+                  <CreateCommunityButtonAndModal guilds={session.guilds} />
+                </Flex>
+              </GridItem>
+            </Grid>
             <TabPanels>
               <TabPanel>
                 <AvailableCommunities />
