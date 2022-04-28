@@ -34,7 +34,7 @@ export default function NewCommunity({ id }: Props) {
   const handleSave = async (e: any) => {
     e.preventDefault()
     if (!session?.userId) return
-    const result = await insertCommunity({
+    await insertCommunity({
       variables: {
         discord_id: id,
         name,
@@ -48,12 +48,7 @@ export default function NewCommunity({ id }: Props) {
     setDescription('')
     setIcon('')
 
-    const newCommunityId = result.data?.insert_community_one?.id
-
-    if (newCommunityId) {
-      const link = `/community/${newCommunityId}`
-      router.push(link)
-    }
+    router.push('/community')
   }
 
   return (

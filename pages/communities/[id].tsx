@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Layout from '../../src/components/layout'
-import ApolloProviderWithAuth from '../../src/components/apolloProviderWithAuth'
 import { useRouter } from 'next/router'
 import CommunityDetail from '../../src/components/communityDetail'
 
@@ -13,11 +12,9 @@ const Communities: NextPage = () => {
   debugger
 
   return (
-    <ApolloProviderWithAuth>
-      <Layout>
-        <CommunityDetail id={Number(id)} />
-      </Layout>
-    </ApolloProviderWithAuth>
+    <Layout>
+      <CommunityDetail id={Number(id)} />
+    </Layout>
   )
 }
 

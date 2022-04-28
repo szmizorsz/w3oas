@@ -56,9 +56,7 @@ export default function CommunityDetail({ id }: Props) {
     refetchQueries: ['getCommunityById'],
   })
 
-  const [deleteCommunity] = useDeleteCommunityByIdMutation({
-    refetchQueries: ['AvailableCommunities'],
-  })
+  const [deleteCommunity] = useDeleteCommunityByIdMutation()
 
   if (loading) return <p>Loading...</p>
 
@@ -67,9 +65,9 @@ export default function CommunityDetail({ id }: Props) {
   if (!community) return <p>No community found with the given id!</p>
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleUpdate = (e: any) => {
+  const handleUpdate = async (e: any) => {
     e.preventDefault()
-    updateCommunity({
+    await updateCommunity({
       // All properties has to be passed not just the ones that we want to change
       // otherwise Hasura will treat them as null values and set the property to null
       variables: {
@@ -83,9 +81,9 @@ export default function CommunityDetail({ id }: Props) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDelete = (e: any) => {
+  const handleDelete = async (e: any) => {
     e.preventDefault()
-    deleteCommunity({
+    await deleteCommunity({
       variables: {
         id,
       },

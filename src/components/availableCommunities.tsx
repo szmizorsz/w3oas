@@ -3,7 +3,9 @@ import { useAvailableCommunitiesQuery } from '../../graphql/generated/graphql'
 import CommunityCard from './communityCard'
 
 export default function AvailableCommunities() {
-  const { data, loading } = useAvailableCommunitiesQuery()
+  const { data, loading } = useAvailableCommunitiesQuery({
+    fetchPolicy: 'cache-and-network',
+  })
 
   if (loading) return <p>Loading...</p>
 

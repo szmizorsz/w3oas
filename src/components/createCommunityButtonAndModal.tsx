@@ -34,6 +34,7 @@ const CreateCommunityButtonAndModal = ({ guilds }: Props) => {
     variables: {
       discord_ids: guildDiscordIds,
     },
+    fetchPolicy: 'cache-and-network',
   })
 
   if (!isOpen) return <Button onClick={onOpen}>Create community</Button>
@@ -45,7 +46,6 @@ const CreateCommunityButtonAndModal = ({ guilds }: Props) => {
   const existingCommunityDiscordIds = existingCommunities?.community.map(
     (community) => community.discord_id
   )
-  //if (!existingCommunityDiscordIds) return null
   const nonExistingGuilds = guilds.filter(
     (guild) =>
       !existingCommunityDiscordIds?.includes(guild.id) && guild.owner === true
