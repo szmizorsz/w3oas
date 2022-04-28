@@ -1,0 +1,42 @@
+table:
+  schema: public
+  name: member
+insert_permissions:
+  - role: member
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - community_id
+        - id
+        - user_id
+      backend_only: false
+select_permissions:
+  - role: member
+    permission:
+      columns:
+        - community_id
+        - id
+        - user_id
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: member
+    permission:
+      columns:
+        - community_id
+        - id
+        - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+delete_permissions:
+  - role: member
+    permission:
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
