@@ -17,11 +17,28 @@ fragment CommunityFields on community {
     discord_user_name
     discord_avatar
   }
+  members_aggregate {
+    aggregate {
+      count
+    }
+  }
+}
+
+fragment MemberFields on community {
+  members {
+    id
+    user {
+      discord_id
+      discord_user_name
+      wallet_address
+    }
+  }
 }
 
 query getCommunityById($id: Int!) {
   community_by_pk(id: $id) {
     ...CommunityFields
+    ...MemberFields
   }
 }
 
@@ -59,6 +76,7 @@ mutation InsertCommunity(
       icon: $icon
       name: $name
       owner_id: $owner_id
+      members: { data: { user_id: $owner_id } }
     }
   ) {
     ...CommunityFields
@@ -68,5 +86,25 @@ mutation InsertCommunity(
 query GetExistingCommunitiesByDiscordIds($discord_ids: [String!]) {
   community(where: { discord_id: { _in: $discord_ids } }) {
     ...CommunityFields
+  }
+}
+
+mutation InsertMember($community_id: Int, $user_id: Int) {
+  insert_member_one(
+    object: { community_id: $community_id, user_id: $user_id }
+  ) {
+    id
+  }
+}
+
+mutation DeleteMember($community_id: Int!, $user_id: Int!) {
+  delete_member(
+    where: {
+      _and: { community_id: { _eq: $community_id }, user_id: { _eq: $user_id } }
+    }
+  ) {
+    returning {
+      id
+    }
   }
 }

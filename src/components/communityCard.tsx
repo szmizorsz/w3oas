@@ -55,7 +55,8 @@ export default function CommunityCard({ community }: Props) {
                       my="3"
                     >
                       <Text color="white" px="2">
-                        126 w3oas members
+                        {community.members_aggregate.aggregate?.count} w3oas
+                        members
                       </Text>
                     </Box>
                   </Center>

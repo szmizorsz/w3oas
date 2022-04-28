@@ -19,6 +19,8 @@ import {
   useDeleteCommunityByIdMutation,
 } from '../../graphql/generated/graphql'
 import { useRouter } from 'next/router'
+import CommunityMembers from './communityMembers'
+import { useSession } from 'next-auth/react'
 
 interface Props {
   id: number
@@ -32,10 +34,14 @@ export default function CommunityDetail({ id }: Props) {
   const [name, setName] = useState('')
   const [icon, setIcon] = useState('')
 
+  const { data: session, status } = useSession()
+  const sessionLoading = status === 'loading'
+
   const { data, loading } = useGetCommunityByIdQuery({
     variables: {
       id,
     },
+    fetchPolicy: 'cache-and-network',
   })
 
   useEffect(() => {
@@ -58,9 +64,13 @@ export default function CommunityDetail({ id }: Props) {
 
   const [deleteCommunity] = useDeleteCommunityByIdMutation()
 
+  if (sessionLoading) return <p>Session loading...</p>
+
   if (loading) return <p>Loading...</p>
 
   const community = data?.community_by_pk
+
+  const isOwner = community?.owner.id === session?.userId
 
   if (!community) return <p>No community found with the given id!</p>
 
@@ -162,27 +172,9 @@ export default function CommunityDetail({ id }: Props) {
           </GridItem>
         </Center>
         <GridItem colSpan={9}>
-          <Grid templateColumns="repeat(10, 1fr)" gap={6}>
-            <GridItem colSpan={8}>
-              <Heading m="5" mb="0" mr="0" as="h4" size="md">
-                {community.name} - owner: {community.owner.discord_user_name}
-              </Heading>
-            </GridItem>
-            <GridItem colSpan={2}>
-              <Center>
-                <Box
-                  borderWidth="1px"
-                  borderRadius="xl"
-                  background="#A0AEC0"
-                  my="3"
-                >
-                  <Text color="white" px="2">
-                    126 w3oas members
-                  </Text>
-                </Box>
-              </Center>
-            </GridItem>
-          </Grid>
+          <Heading m="5" mb="0" mr="0" as="h4" size="md">
+            {community.name} - owner: {community.owner.discord_user_name}
+          </Heading>
           <Box h="40px">
             <Text m="5" mt="2">
               {community.description}
@@ -190,18 +182,30 @@ export default function CommunityDetail({ id }: Props) {
           </Box>
         </GridItem>
       </Grid>
-      <Box my="6">
-        <Button
-          variant="outlined"
-          border="1px"
-          onClick={(e) => {
-            e.preventDefault()
-            setModificationOpen(true)
-          }}
-        >
-          Modify
-        </Button>
-      </Box>
+      {isOwner && (
+        <Box my="6">
+          <Button
+            variant="outlined"
+            border="1px"
+            onClick={(e) => {
+              e.preventDefault()
+              setModificationOpen(true)
+            }}
+          >
+            Modify
+          </Button>
+        </Box>
+      )}
+      {community.members_aggregate.aggregate?.count && (
+        <CommunityMembers
+          communityId={community.id}
+          memberCount={community.members_aggregate.aggregate?.count}
+          members={community.members}
+          loggedInUserDiscordId={session?.providerId}
+          loggedInUserId={session?.userId}
+          isOwner={isOwner}
+        />
+      )}
     </>
   )
 }

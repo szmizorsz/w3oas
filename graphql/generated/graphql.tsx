@@ -68,10 +68,34 @@ export type Community = {
   discord_id: Scalars['String'];
   icon?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
+  /** An array relationship */
+  members: Array<Member>;
+  /** An aggregate relationship */
+  members_aggregate: Member_Aggregate;
   name: Scalars['String'];
   /** An object relationship */
   owner: User;
   owner_id: Scalars['Int'];
+};
+
+
+/** columns and relationships of "community" */
+export type CommunityMembersArgs = {
+  distinct_on?: InputMaybe<Array<Member_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Member_Order_By>>;
+  where?: InputMaybe<Member_Bool_Exp>;
+};
+
+
+/** columns and relationships of "community" */
+export type CommunityMembers_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Member_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Member_Order_By>>;
+  where?: InputMaybe<Member_Bool_Exp>;
 };
 
 /** aggregated selection of "community" */
@@ -120,6 +144,7 @@ export type Community_Bool_Exp = {
   discord_id?: InputMaybe<String_Comparison_Exp>;
   icon?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
+  members?: InputMaybe<Member_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   owner?: InputMaybe<User_Bool_Exp>;
   owner_id?: InputMaybe<Int_Comparison_Exp>;
@@ -143,6 +168,7 @@ export type Community_Insert_Input = {
   discord_id?: InputMaybe<Scalars['String']>;
   icon?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
+  members?: InputMaybe<Member_Arr_Rel_Insert_Input>;
   name?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<User_Obj_Rel_Insert_Input>;
   owner_id?: InputMaybe<Scalars['Int']>;
@@ -179,6 +205,13 @@ export type Community_Mutation_Response = {
   returning: Array<Community>;
 };
 
+/** input type for inserting object relation for remote table "community" */
+export type Community_Obj_Rel_Insert_Input = {
+  data: Community_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Community_On_Conflict>;
+};
+
 /** on_conflict condition type for table "community" */
 export type Community_On_Conflict = {
   constraint: Community_Constraint;
@@ -192,6 +225,7 @@ export type Community_Order_By = {
   discord_id?: InputMaybe<Order_By>;
   icon?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  members_aggregate?: InputMaybe<Member_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
   owner?: InputMaybe<User_Order_By>;
   owner_id?: InputMaybe<Order_By>;
@@ -293,6 +327,313 @@ export type Community_Variance_Fields = {
   owner_id?: Maybe<Scalars['Float']>;
 };
 
+/** columns and relationships of "member" */
+export type Member = {
+  __typename?: 'member';
+  /** An object relationship */
+  community: Community;
+  community_id: Scalars['Int'];
+  id: Scalars['Int'];
+  /** An object relationship */
+  user: User;
+  user_id: Scalars['Int'];
+};
+
+/** aggregated selection of "member" */
+export type Member_Aggregate = {
+  __typename?: 'member_aggregate';
+  aggregate?: Maybe<Member_Aggregate_Fields>;
+  nodes: Array<Member>;
+};
+
+/** aggregate fields of "member" */
+export type Member_Aggregate_Fields = {
+  __typename?: 'member_aggregate_fields';
+  avg?: Maybe<Member_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Member_Max_Fields>;
+  min?: Maybe<Member_Min_Fields>;
+  stddev?: Maybe<Member_Stddev_Fields>;
+  stddev_pop?: Maybe<Member_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Member_Stddev_Samp_Fields>;
+  sum?: Maybe<Member_Sum_Fields>;
+  var_pop?: Maybe<Member_Var_Pop_Fields>;
+  var_samp?: Maybe<Member_Var_Samp_Fields>;
+  variance?: Maybe<Member_Variance_Fields>;
+};
+
+
+/** aggregate fields of "member" */
+export type Member_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Member_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "member" */
+export type Member_Aggregate_Order_By = {
+  avg?: InputMaybe<Member_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Member_Max_Order_By>;
+  min?: InputMaybe<Member_Min_Order_By>;
+  stddev?: InputMaybe<Member_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Member_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Member_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Member_Sum_Order_By>;
+  var_pop?: InputMaybe<Member_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Member_Var_Samp_Order_By>;
+  variance?: InputMaybe<Member_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "member" */
+export type Member_Arr_Rel_Insert_Input = {
+  data: Array<Member_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Member_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Member_Avg_Fields = {
+  __typename?: 'member_avg_fields';
+  community_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "member" */
+export type Member_Avg_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "member". All fields are combined with a logical 'AND'. */
+export type Member_Bool_Exp = {
+  _and?: InputMaybe<Array<Member_Bool_Exp>>;
+  _not?: InputMaybe<Member_Bool_Exp>;
+  _or?: InputMaybe<Array<Member_Bool_Exp>>;
+  community?: InputMaybe<Community_Bool_Exp>;
+  community_id?: InputMaybe<Int_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  user?: InputMaybe<User_Bool_Exp>;
+  user_id?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "member" */
+export enum Member_Constraint {
+  /** unique or primary key constraint */
+  MemberPkey = 'member_pkey',
+  /** unique or primary key constraint */
+  MemberUserIdCommunityIdKey = 'member_user_id_community_id_key'
+}
+
+/** input type for incrementing numeric columns in table "member" */
+export type Member_Inc_Input = {
+  community_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  user_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "member" */
+export type Member_Insert_Input = {
+  community?: InputMaybe<Community_Obj_Rel_Insert_Input>;
+  community_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  user?: InputMaybe<User_Obj_Rel_Insert_Input>;
+  user_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** aggregate max on columns */
+export type Member_Max_Fields = {
+  __typename?: 'member_max_fields';
+  community_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by max() on columns of table "member" */
+export type Member_Max_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Member_Min_Fields = {
+  __typename?: 'member_min_fields';
+  community_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by min() on columns of table "member" */
+export type Member_Min_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "member" */
+export type Member_Mutation_Response = {
+  __typename?: 'member_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Member>;
+};
+
+/** on_conflict condition type for table "member" */
+export type Member_On_Conflict = {
+  constraint: Member_Constraint;
+  update_columns?: Array<Member_Update_Column>;
+  where?: InputMaybe<Member_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "member". */
+export type Member_Order_By = {
+  community?: InputMaybe<Community_Order_By>;
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user?: InputMaybe<User_Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: member */
+export type Member_Pk_Columns_Input = {
+  id: Scalars['Int'];
+};
+
+/** select columns of table "member" */
+export enum Member_Select_Column {
+  /** column name */
+  CommunityId = 'community_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** input type for updating data in table "member" */
+export type Member_Set_Input = {
+  community_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']>;
+  user_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** aggregate stddev on columns */
+export type Member_Stddev_Fields = {
+  __typename?: 'member_stddev_fields';
+  community_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "member" */
+export type Member_Stddev_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Member_Stddev_Pop_Fields = {
+  __typename?: 'member_stddev_pop_fields';
+  community_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "member" */
+export type Member_Stddev_Pop_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Member_Stddev_Samp_Fields = {
+  __typename?: 'member_stddev_samp_fields';
+  community_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "member" */
+export type Member_Stddev_Samp_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Member_Sum_Fields = {
+  __typename?: 'member_sum_fields';
+  community_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "member" */
+export type Member_Sum_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "member" */
+export enum Member_Update_Column {
+  /** column name */
+  CommunityId = 'community_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UserId = 'user_id'
+}
+
+/** aggregate var_pop on columns */
+export type Member_Var_Pop_Fields = {
+  __typename?: 'member_var_pop_fields';
+  community_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "member" */
+export type Member_Var_Pop_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Member_Var_Samp_Fields = {
+  __typename?: 'member_var_samp_fields';
+  community_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "member" */
+export type Member_Var_Samp_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Member_Variance_Fields = {
+  __typename?: 'member_variance_fields';
+  community_id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "member" */
+export type Member_Variance_Order_By = {
+  community_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
+};
+
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
@@ -300,6 +641,10 @@ export type Mutation_Root = {
   delete_community?: Maybe<Community_Mutation_Response>;
   /** delete single row from the table: "community" */
   delete_community_by_pk?: Maybe<Community>;
+  /** delete data from the table: "member" */
+  delete_member?: Maybe<Member_Mutation_Response>;
+  /** delete single row from the table: "member" */
+  delete_member_by_pk?: Maybe<Member>;
   /** delete data from the table: "user" */
   delete_user?: Maybe<User_Mutation_Response>;
   /** delete single row from the table: "user" */
@@ -308,6 +653,10 @@ export type Mutation_Root = {
   insert_community?: Maybe<Community_Mutation_Response>;
   /** insert a single row into the table: "community" */
   insert_community_one?: Maybe<Community>;
+  /** insert data into the table: "member" */
+  insert_member?: Maybe<Member_Mutation_Response>;
+  /** insert a single row into the table: "member" */
+  insert_member_one?: Maybe<Member>;
   /** insert data into the table: "user" */
   insert_user?: Maybe<User_Mutation_Response>;
   /** insert a single row into the table: "user" */
@@ -316,6 +665,10 @@ export type Mutation_Root = {
   update_community?: Maybe<Community_Mutation_Response>;
   /** update single row of the table: "community" */
   update_community_by_pk?: Maybe<Community>;
+  /** update data of the table: "member" */
+  update_member?: Maybe<Member_Mutation_Response>;
+  /** update single row of the table: "member" */
+  update_member_by_pk?: Maybe<Member>;
   /** update data of the table: "user" */
   update_user?: Maybe<User_Mutation_Response>;
   /** update single row of the table: "user" */
@@ -331,6 +684,18 @@ export type Mutation_RootDelete_CommunityArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Community_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_MemberArgs = {
+  where: Member_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Member_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -362,6 +727,20 @@ export type Mutation_RootInsert_Community_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_MemberArgs = {
+  objects: Array<Member_Insert_Input>;
+  on_conflict?: InputMaybe<Member_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Member_OneArgs = {
+  object: Member_Insert_Input;
+  on_conflict?: InputMaybe<Member_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_UserArgs = {
   objects: Array<User_Insert_Input>;
   on_conflict?: InputMaybe<User_On_Conflict>;
@@ -388,6 +767,22 @@ export type Mutation_RootUpdate_Community_By_PkArgs = {
   _inc?: InputMaybe<Community_Inc_Input>;
   _set?: InputMaybe<Community_Set_Input>;
   pk_columns: Community_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_MemberArgs = {
+  _inc?: InputMaybe<Member_Inc_Input>;
+  _set?: InputMaybe<Member_Set_Input>;
+  where: Member_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Member_By_PkArgs = {
+  _inc?: InputMaybe<Member_Inc_Input>;
+  _set?: InputMaybe<Member_Set_Input>;
+  pk_columns: Member_Pk_Columns_Input;
 };
 
 
@@ -430,6 +825,12 @@ export type Query_Root = {
   community_aggregate: Community_Aggregate;
   /** fetch data from the table: "community" using primary key columns */
   community_by_pk?: Maybe<Community>;
+  /** fetch data from the table: "member" */
+  member: Array<Member>;
+  /** fetch aggregated fields from the table: "member" */
+  member_aggregate: Member_Aggregate;
+  /** fetch data from the table: "member" using primary key columns */
+  member_by_pk?: Maybe<Member>;
   /** fetch data from the table: "user" */
   user: Array<User>;
   /** fetch aggregated fields from the table: "user" */
@@ -458,6 +859,29 @@ export type Query_RootCommunity_AggregateArgs = {
 
 
 export type Query_RootCommunity_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Query_RootMemberArgs = {
+  distinct_on?: InputMaybe<Array<Member_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Member_Order_By>>;
+  where?: InputMaybe<Member_Bool_Exp>;
+};
+
+
+export type Query_RootMember_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Member_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Member_Order_By>>;
+  where?: InputMaybe<Member_Bool_Exp>;
+};
+
+
+export type Query_RootMember_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -492,6 +916,12 @@ export type Subscription_Root = {
   community_aggregate: Community_Aggregate;
   /** fetch data from the table: "community" using primary key columns */
   community_by_pk?: Maybe<Community>;
+  /** fetch data from the table: "member" */
+  member: Array<Member>;
+  /** fetch aggregated fields from the table: "member" */
+  member_aggregate: Member_Aggregate;
+  /** fetch data from the table: "member" using primary key columns */
+  member_by_pk?: Maybe<Member>;
   /** fetch data from the table: "user" */
   user: Array<User>;
   /** fetch aggregated fields from the table: "user" */
@@ -520,6 +950,29 @@ export type Subscription_RootCommunity_AggregateArgs = {
 
 
 export type Subscription_RootCommunity_By_PkArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type Subscription_RootMemberArgs = {
+  distinct_on?: InputMaybe<Array<Member_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Member_Order_By>>;
+  where?: InputMaybe<Member_Bool_Exp>;
+};
+
+
+export type Subscription_RootMember_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Member_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Member_Order_By>>;
+  where?: InputMaybe<Member_Bool_Exp>;
+};
+
+
+export type Subscription_RootMember_By_PkArgs = {
   id: Scalars['Int'];
 };
 
@@ -554,7 +1007,31 @@ export type User = {
   discord_id: Scalars['String'];
   discord_user_name?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
+  /** An array relationship */
+  members: Array<Member>;
+  /** An aggregate relationship */
+  members_aggregate: Member_Aggregate;
   wallet_address?: Maybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "user" */
+export type UserMembersArgs = {
+  distinct_on?: InputMaybe<Array<Member_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Member_Order_By>>;
+  where?: InputMaybe<Member_Bool_Exp>;
+};
+
+
+/** columns and relationships of "user" */
+export type UserMembers_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Member_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Member_Order_By>>;
+  where?: InputMaybe<Member_Bool_Exp>;
 };
 
 /** aggregated selection of "user" */
@@ -603,6 +1080,7 @@ export type User_Bool_Exp = {
   discord_id?: InputMaybe<String_Comparison_Exp>;
   discord_user_name?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
+  members?: InputMaybe<Member_Bool_Exp>;
   wallet_address?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -628,6 +1106,7 @@ export type User_Insert_Input = {
   discord_id?: InputMaybe<Scalars['String']>;
   discord_user_name?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
+  members?: InputMaybe<Member_Arr_Rel_Insert_Input>;
   wallet_address?: InputMaybe<Scalars['String']>;
 };
 
@@ -683,6 +1162,7 @@ export type User_Order_By = {
   discord_id?: InputMaybe<Order_By>;
   discord_user_name?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  members_aggregate?: InputMaybe<Member_Aggregate_Order_By>;
   wallet_address?: InputMaybe<Order_By>;
 };
 
@@ -778,16 +1258,18 @@ export type User_Variance_Fields = {
 export type AvailableCommunitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AvailableCommunitiesQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null } }> };
+export type AvailableCommunitiesQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
 
-export type CommunityFieldsFragment = { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null } };
+export type CommunityFieldsFragment = { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } };
+
+export type MemberFieldsFragment = { __typename?: 'community', members: Array<{ __typename?: 'member', id: number, user: { __typename?: 'user', discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } }> };
 
 export type GetCommunityByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetCommunityByIdQuery = { __typename?: 'query_root', community_by_pk?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null } } | null };
+export type GetCommunityByIdQuery = { __typename?: 'query_root', community_by_pk?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null }, members: Array<{ __typename?: 'member', id: number, user: { __typename?: 'user', discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } }> } | null };
 
 export type UpdateCommunityByIdMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -815,14 +1297,30 @@ export type InsertCommunityMutationVariables = Exact<{
 }>;
 
 
-export type InsertCommunityMutation = { __typename?: 'mutation_root', insert_community_one?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null } } | null };
+export type InsertCommunityMutation = { __typename?: 'mutation_root', insert_community_one?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } } | null };
 
 export type GetExistingCommunitiesByDiscordIdsQueryVariables = Exact<{
   discord_ids?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
 
-export type GetExistingCommunitiesByDiscordIdsQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null } }> };
+export type GetExistingCommunitiesByDiscordIdsQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
+
+export type InsertMemberMutationVariables = Exact<{
+  community_id?: InputMaybe<Scalars['Int']>;
+  user_id?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type InsertMemberMutation = { __typename?: 'mutation_root', insert_member_one?: { __typename?: 'member', id: number } | null };
+
+export type DeleteMemberMutationVariables = Exact<{
+  community_id: Scalars['Int'];
+  user_id: Scalars['Int'];
+}>;
+
+
+export type DeleteMemberMutation = { __typename?: 'mutation_root', delete_member?: { __typename?: 'member_mutation_response', returning: Array<{ __typename?: 'member', id: number }> } | null };
 
 export type UpsertUserMutationVariables = Exact<{
   discord_id: Scalars['String'];
@@ -855,6 +1353,23 @@ export const CommunityFieldsFragmentDoc = gql`
     discord_email
     discord_user_name
     discord_avatar
+  }
+  members_aggregate {
+    aggregate {
+      count
+    }
+  }
+}
+    `;
+export const MemberFieldsFragmentDoc = gql`
+    fragment MemberFields on community {
+  members {
+    id
+    user {
+      discord_id
+      discord_user_name
+      wallet_address
+    }
   }
 }
     `;
@@ -896,9 +1411,11 @@ export const GetCommunityByIdDocument = gql`
     query getCommunityById($id: Int!) {
   community_by_pk(id: $id) {
     ...CommunityFields
+    ...MemberFields
   }
 }
-    ${CommunityFieldsFragmentDoc}`;
+    ${CommunityFieldsFragmentDoc}
+${MemberFieldsFragmentDoc}`;
 
 /**
  * __useGetCommunityByIdQuery__
@@ -1002,7 +1519,7 @@ export type DeleteCommunityByIdMutationOptions = Apollo.BaseMutationOptions<Dele
 export const InsertCommunityDocument = gql`
     mutation InsertCommunity($description: String, $discord_id: String!, $name: String!, $icon: String, $owner_id: Int!) {
   insert_community_one(
-    object: {description: $description, discord_id: $discord_id, icon: $icon, name: $name, owner_id: $owner_id}
+    object: {description: $description, discord_id: $discord_id, icon: $icon, name: $name, owner_id: $owner_id, members: {data: {user_id: $owner_id}}}
   ) {
     ...CommunityFields
   }
@@ -1073,6 +1590,78 @@ export function useGetExistingCommunitiesByDiscordIdsLazyQuery(baseOptions?: Apo
 export type GetExistingCommunitiesByDiscordIdsQueryHookResult = ReturnType<typeof useGetExistingCommunitiesByDiscordIdsQuery>;
 export type GetExistingCommunitiesByDiscordIdsLazyQueryHookResult = ReturnType<typeof useGetExistingCommunitiesByDiscordIdsLazyQuery>;
 export type GetExistingCommunitiesByDiscordIdsQueryResult = Apollo.QueryResult<GetExistingCommunitiesByDiscordIdsQuery, GetExistingCommunitiesByDiscordIdsQueryVariables>;
+export const InsertMemberDocument = gql`
+    mutation InsertMember($community_id: Int, $user_id: Int) {
+  insert_member_one(object: {community_id: $community_id, user_id: $user_id}) {
+    id
+  }
+}
+    `;
+export type InsertMemberMutationFn = Apollo.MutationFunction<InsertMemberMutation, InsertMemberMutationVariables>;
+
+/**
+ * __useInsertMemberMutation__
+ *
+ * To run a mutation, you first call `useInsertMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertMemberMutation, { data, loading, error }] = useInsertMemberMutation({
+ *   variables: {
+ *      community_id: // value for 'community_id'
+ *      user_id: // value for 'user_id'
+ *   },
+ * });
+ */
+export function useInsertMemberMutation(baseOptions?: Apollo.MutationHookOptions<InsertMemberMutation, InsertMemberMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertMemberMutation, InsertMemberMutationVariables>(InsertMemberDocument, options);
+      }
+export type InsertMemberMutationHookResult = ReturnType<typeof useInsertMemberMutation>;
+export type InsertMemberMutationResult = Apollo.MutationResult<InsertMemberMutation>;
+export type InsertMemberMutationOptions = Apollo.BaseMutationOptions<InsertMemberMutation, InsertMemberMutationVariables>;
+export const DeleteMemberDocument = gql`
+    mutation DeleteMember($community_id: Int!, $user_id: Int!) {
+  delete_member(
+    where: {_and: {community_id: {_eq: $community_id}, user_id: {_eq: $user_id}}}
+  ) {
+    returning {
+      id
+    }
+  }
+}
+    `;
+export type DeleteMemberMutationFn = Apollo.MutationFunction<DeleteMemberMutation, DeleteMemberMutationVariables>;
+
+/**
+ * __useDeleteMemberMutation__
+ *
+ * To run a mutation, you first call `useDeleteMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMemberMutation, { data, loading, error }] = useDeleteMemberMutation({
+ *   variables: {
+ *      community_id: // value for 'community_id'
+ *      user_id: // value for 'user_id'
+ *   },
+ * });
+ */
+export function useDeleteMemberMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMemberMutation, DeleteMemberMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteMemberMutation, DeleteMemberMutationVariables>(DeleteMemberDocument, options);
+      }
+export type DeleteMemberMutationHookResult = ReturnType<typeof useDeleteMemberMutation>;
+export type DeleteMemberMutationResult = Apollo.MutationResult<DeleteMemberMutation>;
+export type DeleteMemberMutationOptions = Apollo.BaseMutationOptions<DeleteMemberMutation, DeleteMemberMutationVariables>;
 export const UpsertUserDocument = gql`
     mutation upsertUser($discord_id: String!, $discord_email: String, $discord_user_name: String, $discord_avatar: String) {
   insert_user_one(
