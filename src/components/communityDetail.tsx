@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Box,
   Grid,
@@ -14,65 +14,31 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 import {
-  useGetCommunityByIdQuery,
+  CommunityFieldsFragment,
   useUpdateCommunityByIdMutation,
   useDeleteCommunityByIdMutation,
 } from '../../graphql/generated/graphql'
 import { useRouter } from 'next/router'
-import CommunityMembers from './communityMembers'
-import { useSession } from 'next-auth/react'
 
 interface Props {
   id: number
+  community: CommunityFieldsFragment
+  isOwner: boolean
 }
 
-export default function CommunityDetail({ id }: Props) {
+export default function CommunityDetail({ id, community, isOwner }: Props) {
   const router = useRouter()
 
   const [modificationOpen, setModificationOpen] = useState(false)
-  const [description, setDescription] = useState('')
-  const [name, setName] = useState('')
-  const [icon, setIcon] = useState('')
-
-  const { data: session, status } = useSession()
-  const sessionLoading = status === 'loading'
-
-  const { data, loading } = useGetCommunityByIdQuery({
-    variables: {
-      id,
-    },
-    fetchPolicy: 'cache-and-network',
-  })
-
-  useEffect(() => {
-    if (data) {
-      if (data.community_by_pk?.name) {
-        setName(data.community_by_pk?.name)
-      }
-      if (data.community_by_pk?.description) {
-        setDescription(data.community_by_pk.description)
-      }
-      if (data.community_by_pk?.icon) {
-        setIcon(data.community_by_pk.icon)
-      }
-    }
-  }, [data])
+  const [description, setDescription] = useState(community.description)
+  const [name, setName] = useState(community.name)
+  const [icon, setIcon] = useState(community.icon)
 
   const [updateCommunity] = useUpdateCommunityByIdMutation({
     refetchQueries: ['getCommunityById'],
   })
 
   const [deleteCommunity] = useDeleteCommunityByIdMutation()
-
-  if (sessionLoading) return <p>Session loading...</p>
-
-  if (loading) return <p>Loading...</p>
-
-  const community = data?.community_by_pk
-
-  const isOwner = community?.owner.id === session?.userId
-
-  if (!community) return <p>No community found with the given id!</p>
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleUpdate = async (e: any) => {
@@ -123,7 +89,7 @@ export default function CommunityDetail({ id }: Props) {
             resize="vertical"
             id="description"
             placeholder="description"
-            value={description}
+            value={description ? description : ''}
             onChange={(e) => {
               e.preventDefault()
               setDescription(e.target.value)
@@ -134,7 +100,7 @@ export default function CommunityDetail({ id }: Props) {
             id="icon"
             type="text"
             placeholder="icon"
-            value={icon}
+            value={icon ? icon : ''}
             onChange={(e) => {
               e.preventDefault()
               setIcon(e.target.value)
@@ -195,16 +161,6 @@ export default function CommunityDetail({ id }: Props) {
             Modify
           </Button>
         </Box>
-      )}
-      {community.members_aggregate.aggregate?.count && (
-        <CommunityMembers
-          communityId={community.id}
-          memberCount={community.members_aggregate.aggregate?.count}
-          members={community.members}
-          loggedInUserDiscordId={session?.providerId}
-          loggedInUserId={session?.userId}
-          isOwner={isOwner}
-        />
       )}
     </>
   )
