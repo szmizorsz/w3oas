@@ -1,0 +1,167 @@
+import { useState } from 'react'
+import {
+  Box,
+  Grid,
+  GridItem,
+  Heading,
+  Center,
+  Image,
+  Text,
+  Button,
+  HStack,
+  FormControl,
+  Input,
+  Textarea,
+} from '@chakra-ui/react'
+import {
+  CommunityFieldsFragment,
+  useUpdateCommunityByIdMutation,
+  useDeleteCommunityByIdMutation,
+} from '../../graphql/generated/graphql'
+import { useRouter } from 'next/router'
+
+interface Props {
+  id: number
+  community: CommunityFieldsFragment
+  isOwner: boolean
+}
+
+export default function CommunityDetail({ id, community, isOwner }: Props) {
+  const router = useRouter()
+
+  const [modificationOpen, setModificationOpen] = useState(false)
+  const [description, setDescription] = useState(community.description)
+  const [name, setName] = useState(community.name)
+  const [icon, setIcon] = useState(community.icon)
+
+  const [updateCommunity] = useUpdateCommunityByIdMutation({
+    refetchQueries: ['getCommunityById'],
+  })
+
+  const [deleteCommunity] = useDeleteCommunityByIdMutation()
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdate = async (e: any) => {
+    e.preventDefault()
+    await updateCommunity({
+      // All properties has to be passed not just the ones that we want to change
+      // otherwise Hasura will treat them as null values and set the property to null
+      variables: {
+        id,
+        name,
+        description,
+        icon,
+      },
+    })
+    setModificationOpen(false)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDelete = async (e: any) => {
+    e.preventDefault()
+    await deleteCommunity({
+      variables: {
+        id,
+      },
+    })
+    router.push('/community')
+    setModificationOpen(false)
+  }
+
+  if (modificationOpen) {
+    return (
+      <>
+        <FormControl>
+          <Input
+            my={1}
+            id="name"
+            type="text"
+            placeholder="name"
+            value={name}
+            onChange={(e) => {
+              e.preventDefault()
+              setName(e.target.value)
+            }}
+          />
+          <Textarea
+            my={1}
+            size="md"
+            resize="vertical"
+            id="description"
+            placeholder="description"
+            value={description ? description : ''}
+            onChange={(e) => {
+              e.preventDefault()
+              setDescription(e.target.value)
+            }}
+          />
+          <Input
+            my={1}
+            id="icon"
+            type="text"
+            placeholder="icon"
+            value={icon ? icon : ''}
+            onChange={(e) => {
+              e.preventDefault()
+              setIcon(e.target.value)
+            }}
+          />
+        </FormControl>
+        <HStack ml="1" mt="5" spacing="15px">
+          <Button variant="outlined" border="1px" onClick={handleUpdate}>
+            Save
+          </Button>
+          <Button variant="outlined" border="1px" onClick={handleDelete}>
+            Delete
+          </Button>
+          <Button
+            variant="outlined"
+            border="1px"
+            onClick={(e) => {
+              e.preventDefault()
+              setModificationOpen(false)
+            }}
+          >
+            Close
+          </Button>
+        </HStack>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <Grid templateColumns="repeat(10, 1fr)" gap={6}>
+        <Center>
+          <GridItem colSpan={1}>
+            {community.icon && <Image src={community.icon} alt="icon"></Image>}
+          </GridItem>
+        </Center>
+        <GridItem colSpan={9}>
+          <Heading m="5" mb="0" mr="0" as="h4" size="md">
+            {community.name} - owner: {community.owner.discord_user_name}
+          </Heading>
+          <Box h="40px">
+            <Text m="5" mt="2">
+              {community.description}
+            </Text>
+          </Box>
+        </GridItem>
+      </Grid>
+      {isOwner && (
+        <Box my="6">
+          <Button
+            variant="outlined"
+            border="1px"
+            onClick={(e) => {
+              e.preventDefault()
+              setModificationOpen(true)
+            }}
+          >
+            Modify
+          </Button>
+        </Box>
+      )}
+    </>
+  )
+}
