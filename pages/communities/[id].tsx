@@ -13,7 +13,7 @@ const Communities: NextPage = () => {
   const { data: session, status } = useSession()
   const sessionLoading = status === 'loading'
 
-  const { data, loading } = useGetCommunityByIdQuery({
+  const { data } = useGetCommunityByIdQuery({
     variables: {
       id: Number(id),
     },
@@ -23,8 +23,6 @@ const Communities: NextPage = () => {
   if (!id) return <p>There is no id passed</p>
 
   if (sessionLoading) return <p>Session loading...</p>
-
-  if (loading) return <p>Loading...</p>
 
   const community = data?.community_by_pk
 
