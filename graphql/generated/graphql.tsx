@@ -1255,10 +1255,19 @@ export type User_Variance_Fields = {
   id?: Maybe<Scalars['Float']>;
 };
 
-export type AvailableCommunitiesQueryVariables = Exact<{ [key: string]: never; }>;
+export type AvailableCommunitiesQueryVariables = Exact<{
+  user_id: Scalars['Int'];
+}>;
 
 
 export type AvailableCommunitiesQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
+
+export type MyCommunitiesQueryVariables = Exact<{
+  user_id: Scalars['Int'];
+}>;
+
+
+export type MyCommunitiesQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
 
 export type CommunityFieldsFragment = { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } };
 
@@ -1374,8 +1383,8 @@ export const MemberFieldsFragmentDoc = gql`
 }
     `;
 export const AvailableCommunitiesDocument = gql`
-    query AvailableCommunities {
-  community {
+    query AvailableCommunities($user_id: Int!) {
+  community(where: {_not: {members: {user_id: {_eq: $user_id}}}}) {
     ...CommunityFields
   }
 }
@@ -1393,10 +1402,11 @@ export const AvailableCommunitiesDocument = gql`
  * @example
  * const { data, loading, error } = useAvailableCommunitiesQuery({
  *   variables: {
+ *      user_id: // value for 'user_id'
  *   },
  * });
  */
-export function useAvailableCommunitiesQuery(baseOptions?: Apollo.QueryHookOptions<AvailableCommunitiesQuery, AvailableCommunitiesQueryVariables>) {
+export function useAvailableCommunitiesQuery(baseOptions: Apollo.QueryHookOptions<AvailableCommunitiesQuery, AvailableCommunitiesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<AvailableCommunitiesQuery, AvailableCommunitiesQueryVariables>(AvailableCommunitiesDocument, options);
       }
@@ -1407,6 +1417,41 @@ export function useAvailableCommunitiesLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type AvailableCommunitiesQueryHookResult = ReturnType<typeof useAvailableCommunitiesQuery>;
 export type AvailableCommunitiesLazyQueryHookResult = ReturnType<typeof useAvailableCommunitiesLazyQuery>;
 export type AvailableCommunitiesQueryResult = Apollo.QueryResult<AvailableCommunitiesQuery, AvailableCommunitiesQueryVariables>;
+export const MyCommunitiesDocument = gql`
+    query MyCommunities($user_id: Int!) {
+  community(where: {members: {user_id: {_eq: $user_id}}}) {
+    ...CommunityFields
+  }
+}
+    ${CommunityFieldsFragmentDoc}`;
+
+/**
+ * __useMyCommunitiesQuery__
+ *
+ * To run a query within a React component, call `useMyCommunitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyCommunitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyCommunitiesQuery({
+ *   variables: {
+ *      user_id: // value for 'user_id'
+ *   },
+ * });
+ */
+export function useMyCommunitiesQuery(baseOptions: Apollo.QueryHookOptions<MyCommunitiesQuery, MyCommunitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyCommunitiesQuery, MyCommunitiesQueryVariables>(MyCommunitiesDocument, options);
+      }
+export function useMyCommunitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyCommunitiesQuery, MyCommunitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyCommunitiesQuery, MyCommunitiesQueryVariables>(MyCommunitiesDocument, options);
+        }
+export type MyCommunitiesQueryHookResult = ReturnType<typeof useMyCommunitiesQuery>;
+export type MyCommunitiesLazyQueryHookResult = ReturnType<typeof useMyCommunitiesLazyQuery>;
+export type MyCommunitiesQueryResult = Apollo.QueryResult<MyCommunitiesQuery, MyCommunitiesQueryVariables>;
 export const GetCommunityByIdDocument = gql`
     query getCommunityById($id: Int!) {
   community_by_pk(id: $id) {

@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import AvailableCommunities from '../src/components/availableCommunities'
 import { Grid, GridItem, Flex, Spacer, Box } from '@chakra-ui/react'
 import CreateCommunityButtonAndModal from '../src/components/createCommunityButtonAndModal'
+import MyCommunities from '../src/components/myCommunities'
 
 const Community: NextPage = () => {
   const { data: session, status } = useSession()
@@ -19,8 +20,8 @@ const Community: NextPage = () => {
           <Grid templateColumns="repeat(10, 1fr)" gap={6}>
             <GridItem colSpan={8}>
               <TabList>
-                <Tab>Available communities</Tab>
                 <Tab>My communities</Tab>
+                <Tab>Available communities</Tab>
               </TabList>
             </GridItem>
             <GridItem colSpan={2} placeItems="start">
@@ -33,10 +34,13 @@ const Community: NextPage = () => {
           </Grid>
           <TabPanels>
             <TabPanel>
-              <AvailableCommunities />
+              <MyCommunities userId={session.userId} />
             </TabPanel>
             <TabPanel>
-              <p>two!</p>
+              <AvailableCommunities
+                userId={session.userId}
+                guilds={session.guilds}
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>

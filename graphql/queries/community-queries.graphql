@@ -1,5 +1,11 @@
-query AvailableCommunities {
-  community {
+query AvailableCommunities($user_id: Int!) {
+  community(where: { _not: { members: { user_id: { _eq: $user_id } } } }) {
+    ...CommunityFields
+  }
+}
+
+query MyCommunities($user_id: Int!) {
+  community(where: { members: { user_id: { _eq: $user_id } } }) {
     ...CommunityFields
   }
 }
