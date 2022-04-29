@@ -26,20 +26,15 @@ const CreateCommunityButtonAndModal = ({ guilds }: Props) => {
     .map((guild) => guild.id)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const {
-    data: existingCommunities,
-    loading,
-    error,
-  } = useGetExistingCommunitiesByDiscordIdsQuery({
-    variables: {
-      discord_ids: guildDiscordIds,
-    },
-    fetchPolicy: 'cache-and-network',
-  })
+  const { data: existingCommunities, error } =
+    useGetExistingCommunitiesByDiscordIdsQuery({
+      variables: {
+        discord_ids: guildDiscordIds,
+      },
+      fetchPolicy: 'cache-and-network',
+    })
 
   if (!isOpen) return <Button onClick={onOpen}>Create community</Button>
-
-  if (loading) return <p>DB query loading....</p>
 
   if (error) return <p>Error! {error.message}</p>
 
