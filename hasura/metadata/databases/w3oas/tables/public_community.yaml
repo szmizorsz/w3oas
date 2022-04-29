@@ -1,11 +1,15 @@
 table:
   schema: public
-  name: user
+  name: community
+object_relationships:
+  - name: owner
+    using:
+      foreign_key_constraint_on: owner_id
 array_relationships:
   - name: members
     using:
       foreign_key_constraint_on:
-        column: user_id
+        column: community_id
         table:
           schema: public
           name: member
@@ -13,26 +17,26 @@ insert_permissions:
   - role: member
     permission:
       check:
-        id:
+        owner_id:
           _eq: X-Hasura-User-Id
       columns:
         - id
+        - owner_id
+        - description
         - discord_id
-        - discord_user_name
-        - discord_avatar
-        - discord_email
-        - wallet_address
+        - icon
+        - name
       backend_only: false
 select_permissions:
   - role: member
     permission:
       columns:
         - id
-        - discord_avatar
-        - discord_email
+        - owner_id
+        - description
         - discord_id
-        - discord_user_name
-        - wallet_address
+        - icon
+        - name
       filter: {}
       allow_aggregations: true
 update_permissions:
@@ -40,12 +44,18 @@ update_permissions:
     permission:
       columns:
         - id
-        - discord_avatar
-        - discord_email
+        - owner_id
+        - description
         - discord_id
-        - discord_user_name
-        - wallet_address
+        - icon
+        - name
       filter:
-        id:
+        owner_id:
           _eq: X-Hasura-User-Id
       check: {}
+delete_permissions:
+  - role: member
+    permission:
+      filter:
+        owner_id:
+          _eq: X-Hasura-User-Id

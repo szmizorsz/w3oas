@@ -24,3 +24,12 @@ mutation upsertUser(
     id
   }
 }
+
+mutation UpdateWalletForUserById($user_id: Int!, $address: String!) {
+  update_user_by_pk(
+    pk_columns: { id: $user_id }
+    _set: { wallet_address: $address }
+  ) {
+    wallet_address
+  }
+}

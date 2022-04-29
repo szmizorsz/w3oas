@@ -1,0 +1,1 @@
+CREATE TABLE "public"."member" ("id" serial NOT NULL, "user_id" integer NOT NULL, "community_id" integer NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("community_id") REFERENCES "public"."community"("id") ON UPDATE restrict ON DELETE restrict, UNIQUE ("user_id", "community_id"));

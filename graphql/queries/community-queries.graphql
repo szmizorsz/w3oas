@@ -1,0 +1,116 @@
+query AvailableCommunities($user_id: Int!) {
+  community(where: { _not: { members: { user_id: { _eq: $user_id } } } }) {
+    ...CommunityFields
+  }
+}
+
+query MyCommunities($user_id: Int!) {
+  community(where: { members: { user_id: { _eq: $user_id } } }) {
+    ...CommunityFields
+  }
+}
+
+fragment CommunityFields on community {
+  description
+  discord_id
+  icon
+  id
+  name
+  owner {
+    id
+    discord_id
+    discord_email
+    discord_user_name
+    discord_avatar
+  }
+  members_aggregate {
+    aggregate {
+      count
+    }
+  }
+}
+
+fragment MemberFields on community {
+  members {
+    id
+    user {
+      discord_id
+      discord_user_name
+      wallet_address
+    }
+  }
+}
+
+query getCommunityById($id: Int!) {
+  community_by_pk(id: $id) {
+    ...CommunityFields
+    ...MemberFields
+  }
+}
+
+mutation UpdateCommunityById(
+  $id: Int!
+  $name: String
+  $description: String
+  $icon: String
+) {
+  update_community_by_pk(
+    pk_columns: { id: $id }
+    _set: { description: $description, icon: $icon, name: $name }
+  ) {
+    id
+  }
+}
+
+mutation DeleteCommunityById($id: Int!) {
+  delete_community_by_pk(id: $id) {
+    id
+  }
+}
+
+mutation InsertCommunity(
+  $description: String
+  $discord_id: String!
+  $name: String!
+  $icon: String
+  $owner_id: Int!
+) {
+  insert_community_one(
+    object: {
+      description: $description
+      discord_id: $discord_id
+      icon: $icon
+      name: $name
+      owner_id: $owner_id
+      members: { data: { user_id: $owner_id } }
+    }
+  ) {
+    ...CommunityFields
+  }
+}
+
+query GetExistingCommunitiesByDiscordIds($discord_ids: [String!]) {
+  community(where: { discord_id: { _in: $discord_ids } }) {
+    ...CommunityFields
+  }
+}
+
+mutation InsertMember($community_id: Int, $user_id: Int) {
+  insert_member_one(
+    object: { community_id: $community_id, user_id: $user_id }
+  ) {
+    id
+  }
+}
+
+mutation DeleteMember($community_id: Int!, $user_id: Int!) {
+  delete_member(
+    where: {
+      _and: { community_id: { _eq: $community_id }, user_id: { _eq: $user_id } }
+    }
+  ) {
+    returning {
+      id
+    }
+  }
+}
