@@ -36,6 +36,7 @@ const Communities: NextPage = () => {
         id={Number(id)}
         community={community}
         isOwner={isOwner}
+        encodedJwt={session?.encodedJwt}
       />
       {community.members_aggregate.aggregate?.count && (
         <CommunityMembers

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
   Box,
   Grid,
@@ -13,7 +14,10 @@ import {
   useInsertMemberMutation,
   useDeleteMemberMutation,
 } from '../../graphql/generated/graphql'
+import useCommunityNftContract from '../hooks/useCommunityNftContract'
+import { communityNFTtokenID } from '../config/config'
 
+import type { UserWithNftMembership } from '../types/w3oas'
 import type { MemberFieldsFragment } from '../../graphql/generated/graphql'
 
 interface Props {
@@ -35,6 +39,9 @@ export default function CommunityMembers({
 }: Props) {
   const [insertMember] = useInsertMemberMutation()
   const [deleteMember] = useDeleteMemberMutation()
+  const [usersWithMembershipNftInfo, setUsersWithMembershipNftInfo] = useState<
+    Array<UserWithNftMembership>
+  >([])
 
   let isLoggedInUserMember = false
 
@@ -43,6 +50,32 @@ export default function CommunityMembers({
       .map((member) => member.user.discord_id)
       .includes(loggedInUserDiscordId)
   }
+  const communityNftContract = useCommunityNftContract()
+
+  useEffect(() => {
+    async function getMemberships() {
+      if (members) {
+        const userWithMembershipInfo: Array<UserWithNftMembership> = []
+        for (const member of members) {
+          if (member.user.wallet_address) {
+            const communityNftMembership =
+              await communityNftContract?.balanceOf(
+                member.user.wallet_address,
+                communityNFTtokenID
+              )
+            userWithMembershipInfo.push({
+              user: member.user,
+              isOwningMembershipNft: communityNftMembership
+                ? !communityNftMembership.isZero()
+                : false,
+            })
+          }
+        }
+        setUsersWithMembershipNftInfo(userWithMembershipInfo)
+      }
+    }
+    getMemberships()
+  }, [members, communityNftContract])
 
   const handleJoin = async () => {
     await insertMember({
@@ -87,8 +120,8 @@ export default function CommunityMembers({
             </GridItem>
           </Grid>
           <AccordionPanel>
-            {members.map((member) => (
-              <Box key={member.id}>
+            {usersWithMembershipNftInfo.map((member) => (
+              <Box key={member.user.discord_id}>
                 <Grid
                   templateRows="repeat(2, 1fr)"
                   templateColumns="repeat(8, 1fr)"
@@ -98,6 +131,11 @@ export default function CommunityMembers({
                   </GridItem>
                   <GridItem rowSpan={1} colSpan={4}>
                     <Box>Address: {member.user.wallet_address}</Box>
+                  </GridItem>
+                  <GridItem rowSpan={1} colSpan={2}>
+                    <Box>
+                      Membership NFT Claimed: {member.isOwningMembershipNft}
+                    </Box>
                   </GridItem>
                 </Grid>
               </Box>

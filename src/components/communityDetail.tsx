@@ -19,14 +19,21 @@ import {
   useDeleteCommunityByIdMutation,
 } from '../../graphql/generated/graphql'
 import { useRouter } from 'next/router'
+//import type { CommunityNftDeploymentResponseData } from '../../pages/api/community-nft/deployment'
 
 interface Props {
   id: number
   community: CommunityFieldsFragment
   isOwner: boolean
+  encodedJwt: string | undefined
 }
 
-export default function CommunityDetail({ id, community, isOwner }: Props) {
+export default function CommunityDetail({
+  id,
+  community,
+  isOwner,
+  encodedJwt,
+}: Props) {
   const router = useRouter()
 
   const [modificationOpen, setModificationOpen] = useState(false)
@@ -66,6 +73,26 @@ export default function CommunityDetail({ id, community, isOwner }: Props) {
     })
     router.push('/community')
     setModificationOpen(false)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleCommunityNftDeployment = async (e: any) => {
+    e.preventDefault()
+
+    await fetch('/api/community-nft/deployment', {
+      method: 'POST',
+      headers: { authorization: encodedJwt ? `Bearer ${encodedJwt}` : '' },
+      body: JSON.stringify({
+        communityId: id,
+        communityOwnerAddress: community.owner.wallet_address,
+        membershipNFTtokenURI: community.icon,
+      }),
+    })
+
+    // const { error, communityNFTContractAddress } =
+    //   (await res.json()) as CommunityNftDeploymentResponseData
+
+    router.push(`/communities/${id}`)
   }
 
   if (modificationOpen) {
@@ -146,10 +173,17 @@ export default function CommunityDetail({ id, community, isOwner }: Props) {
               {community.description}
             </Text>
           </Box>
+          {community.nft_contract_address && (
+            <Box h="40px">
+              <Text m="5" mt="2">
+                Community NFT Contract: {community.nft_contract_address}
+              </Text>
+            </Box>
+          )}
         </GridItem>
       </Grid>
-      {isOwner && (
-        <Box my="6">
+      <Box my="6">
+        {isOwner && (
           <Button
             variant="outlined"
             border="1px"
@@ -160,8 +194,18 @@ export default function CommunityDetail({ id, community, isOwner }: Props) {
           >
             Modify
           </Button>
-        </Box>
-      )}
+        )}
+        {isOwner && !community.nft_contract_address && (
+          <Button
+            ml={5}
+            variant="outlined"
+            border="1px"
+            onClick={handleCommunityNftDeployment}
+          >
+            Deploy Community NFT contract
+          </Button>
+        )}
+      </Box>
     </>
   )
 }

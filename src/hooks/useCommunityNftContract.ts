@@ -1,13 +1,14 @@
 import { ethers } from 'ethers'
 import { useEffect, useState } from 'react'
 
-import type { Greeter } from '../typechain'
-import { Greeter__factory } from '../typechain'
+import type { CommunityNFT } from '../typechain'
+import { CommunityNFT__factory } from '../typechain'
 
-export default function useGreeterContract(
+export default function useCommunityNftContract(
   signer?: ethers.providers.JsonRpcSigner
 ) {
-  const [greeterContract, setGreeterContract] = useState<Greeter | null>(null)
+  const [communityNftcontract, setCommunityNftContract] =
+    useState<CommunityNFT | null>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -22,14 +23,14 @@ export default function useGreeterContract(
         signer ||
         new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_TARGET)
 
-      const contract = Greeter__factory.connect(
+      const contract = CommunityNFT__factory.connect(
         process.env.NEXT_PUBLIC_GREETER_CONTRACT_ADDRESS,
         signerOrProvider
       )
 
-      setGreeterContract(contract)
+      setCommunityNftContract(contract)
     })()
   }, [signer])
 
-  return greeterContract
+  return communityNftcontract
 }

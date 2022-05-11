@@ -73,6 +73,7 @@ export type Community = {
   /** An aggregate relationship */
   members_aggregate: Member_Aggregate;
   name: Scalars['String'];
+  nft_contract_address?: Maybe<Scalars['String']>;
   /** An object relationship */
   owner: User;
   owner_id: Scalars['Int'];
@@ -146,6 +147,7 @@ export type Community_Bool_Exp = {
   id?: InputMaybe<Int_Comparison_Exp>;
   members?: InputMaybe<Member_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  nft_contract_address?: InputMaybe<String_Comparison_Exp>;
   owner?: InputMaybe<User_Bool_Exp>;
   owner_id?: InputMaybe<Int_Comparison_Exp>;
 };
@@ -170,6 +172,7 @@ export type Community_Insert_Input = {
   id?: InputMaybe<Scalars['Int']>;
   members?: InputMaybe<Member_Arr_Rel_Insert_Input>;
   name?: InputMaybe<Scalars['String']>;
+  nft_contract_address?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<User_Obj_Rel_Insert_Input>;
   owner_id?: InputMaybe<Scalars['Int']>;
 };
@@ -182,6 +185,7 @@ export type Community_Max_Fields = {
   icon?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
+  nft_contract_address?: Maybe<Scalars['String']>;
   owner_id?: Maybe<Scalars['Int']>;
 };
 
@@ -193,6 +197,7 @@ export type Community_Min_Fields = {
   icon?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
+  nft_contract_address?: Maybe<Scalars['String']>;
   owner_id?: Maybe<Scalars['Int']>;
 };
 
@@ -227,6 +232,7 @@ export type Community_Order_By = {
   id?: InputMaybe<Order_By>;
   members_aggregate?: InputMaybe<Member_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
+  nft_contract_address?: InputMaybe<Order_By>;
   owner?: InputMaybe<User_Order_By>;
   owner_id?: InputMaybe<Order_By>;
 };
@@ -249,6 +255,8 @@ export enum Community_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  NftContractAddress = 'nft_contract_address',
+  /** column name */
   OwnerId = 'owner_id'
 }
 
@@ -259,6 +267,7 @@ export type Community_Set_Input = {
   icon?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
+  nft_contract_address?: InputMaybe<Scalars['String']>;
   owner_id?: InputMaybe<Scalars['Int']>;
 };
 
@@ -302,6 +311,8 @@ export enum Community_Update_Column {
   Id = 'id',
   /** column name */
   Name = 'name',
+  /** column name */
+  NftContractAddress = 'nft_contract_address',
   /** column name */
   OwnerId = 'owner_id'
 }
@@ -1260,25 +1271,27 @@ export type AvailableCommunitiesQueryVariables = Exact<{
 }>;
 
 
-export type AvailableCommunitiesQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
+export type AvailableCommunitiesQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, nft_contract_address?: string | null, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null, wallet_address?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
 
 export type MyCommunitiesQueryVariables = Exact<{
   user_id: Scalars['Int'];
 }>;
 
 
-export type MyCommunitiesQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
+export type MyCommunitiesQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, nft_contract_address?: string | null, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null, wallet_address?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
 
-export type CommunityFieldsFragment = { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } };
+export type CommunityFieldsFragment = { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, nft_contract_address?: string | null, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null, wallet_address?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } };
 
 export type MemberFieldsFragment = { __typename?: 'community', members: Array<{ __typename?: 'member', id: number, user: { __typename?: 'user', discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } }> };
+
+export type UserFieldsFragment = { __typename?: 'user', discord_id: string, discord_user_name?: string | null, wallet_address?: string | null };
 
 export type GetCommunityByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetCommunityByIdQuery = { __typename?: 'query_root', community_by_pk?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null }, members: Array<{ __typename?: 'member', id: number, user: { __typename?: 'user', discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } }> } | null };
+export type GetCommunityByIdQuery = { __typename?: 'query_root', community_by_pk?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, nft_contract_address?: string | null, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null, wallet_address?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null }, members: Array<{ __typename?: 'member', id: number, user: { __typename?: 'user', discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } }> } | null };
 
 export type UpdateCommunityByIdMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1306,14 +1319,14 @@ export type InsertCommunityMutationVariables = Exact<{
 }>;
 
 
-export type InsertCommunityMutation = { __typename?: 'mutation_root', insert_community_one?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } } | null };
+export type InsertCommunityMutation = { __typename?: 'mutation_root', insert_community_one?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, nft_contract_address?: string | null, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null, wallet_address?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } } | null };
 
 export type GetExistingCommunitiesByDiscordIdsQueryVariables = Exact<{
   discord_ids?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
 
-export type GetExistingCommunitiesByDiscordIdsQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
+export type GetExistingCommunitiesByDiscordIdsQuery = { __typename?: 'query_root', community: Array<{ __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, nft_contract_address?: string | null, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null, wallet_address?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } }> };
 
 export type InsertMemberMutationVariables = Exact<{
   community_id?: InputMaybe<Scalars['Int']>;
@@ -1330,6 +1343,14 @@ export type DeleteMemberMutationVariables = Exact<{
 
 
 export type DeleteMemberMutation = { __typename?: 'mutation_root', delete_member?: { __typename?: 'member_mutation_response', returning: Array<{ __typename?: 'member', id: number }> } | null };
+
+export type SetNftContractAddressByIdMutationVariables = Exact<{
+  id: Scalars['Int'];
+  nft_contract_address: Scalars['String'];
+}>;
+
+
+export type SetNftContractAddressByIdMutation = { __typename?: 'mutation_root', update_community_by_pk?: { __typename?: 'community', nft_contract_address?: string | null } | null };
 
 export type UpsertUserMutationVariables = Exact<{
   discord_id: Scalars['String'];
@@ -1356,12 +1377,14 @@ export const CommunityFieldsFragmentDoc = gql`
   icon
   id
   name
+  nft_contract_address
   owner {
     id
     discord_id
     discord_email
     discord_user_name
     discord_avatar
+    wallet_address
   }
   members_aggregate {
     aggregate {
@@ -1370,18 +1393,23 @@ export const CommunityFieldsFragmentDoc = gql`
   }
 }
     `;
+export const UserFieldsFragmentDoc = gql`
+    fragment UserFields on user {
+  discord_id
+  discord_user_name
+  wallet_address
+}
+    `;
 export const MemberFieldsFragmentDoc = gql`
     fragment MemberFields on community {
   members {
     id
     user {
-      discord_id
-      discord_user_name
-      wallet_address
+      ...UserFields
     }
   }
 }
-    `;
+    ${UserFieldsFragmentDoc}`;
 export const AvailableCommunitiesDocument = gql`
     query AvailableCommunities($user_id: Int!) {
   community(where: {_not: {members: {user_id: {_eq: $user_id}}}}) {
@@ -1707,6 +1735,43 @@ export function useDeleteMemberMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteMemberMutationHookResult = ReturnType<typeof useDeleteMemberMutation>;
 export type DeleteMemberMutationResult = Apollo.MutationResult<DeleteMemberMutation>;
 export type DeleteMemberMutationOptions = Apollo.BaseMutationOptions<DeleteMemberMutation, DeleteMemberMutationVariables>;
+export const SetNftContractAddressByIdDocument = gql`
+    mutation setNftContractAddressById($id: Int!, $nft_contract_address: String!) {
+  update_community_by_pk(
+    pk_columns: {id: $id}
+    _set: {nft_contract_address: $nft_contract_address}
+  ) {
+    nft_contract_address
+  }
+}
+    `;
+export type SetNftContractAddressByIdMutationFn = Apollo.MutationFunction<SetNftContractAddressByIdMutation, SetNftContractAddressByIdMutationVariables>;
+
+/**
+ * __useSetNftContractAddressByIdMutation__
+ *
+ * To run a mutation, you first call `useSetNftContractAddressByIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetNftContractAddressByIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setNftContractAddressByIdMutation, { data, loading, error }] = useSetNftContractAddressByIdMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      nft_contract_address: // value for 'nft_contract_address'
+ *   },
+ * });
+ */
+export function useSetNftContractAddressByIdMutation(baseOptions?: Apollo.MutationHookOptions<SetNftContractAddressByIdMutation, SetNftContractAddressByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetNftContractAddressByIdMutation, SetNftContractAddressByIdMutationVariables>(SetNftContractAddressByIdDocument, options);
+      }
+export type SetNftContractAddressByIdMutationHookResult = ReturnType<typeof useSetNftContractAddressByIdMutation>;
+export type SetNftContractAddressByIdMutationResult = Apollo.MutationResult<SetNftContractAddressByIdMutation>;
+export type SetNftContractAddressByIdMutationOptions = Apollo.BaseMutationOptions<SetNftContractAddressByIdMutation, SetNftContractAddressByIdMutationVariables>;
 export const UpsertUserDocument = gql`
     mutation upsertUser($discord_id: String!, $discord_email: String, $discord_user_name: String, $discord_avatar: String) {
   insert_user_one(

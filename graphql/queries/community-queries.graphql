@@ -16,12 +16,14 @@ fragment CommunityFields on community {
   icon
   id
   name
+  nft_contract_address
   owner {
     id
     discord_id
     discord_email
     discord_user_name
     discord_avatar
+    wallet_address
   }
   members_aggregate {
     aggregate {
@@ -34,11 +36,15 @@ fragment MemberFields on community {
   members {
     id
     user {
-      discord_id
-      discord_user_name
-      wallet_address
+      ...UserFields
     }
   }
+}
+
+fragment UserFields on user {
+  discord_id
+  discord_user_name
+  wallet_address
 }
 
 query getCommunityById($id: Int!) {
@@ -112,5 +118,14 @@ mutation DeleteMember($community_id: Int!, $user_id: Int!) {
     returning {
       id
     }
+  }
+}
+
+mutation setNftContractAddressById($id: Int!, $nft_contract_address: String!) {
+  update_community_by_pk(
+    pk_columns: { id: $id }
+    _set: { nft_contract_address: $nft_contract_address }
+  ) {
+    nft_contract_address
   }
 }
