@@ -41,9 +41,8 @@ export default function CommunityMembers({
 }: Props) {
   const [insertMember] = useInsertMemberMutation()
   const [deleteMember] = useDeleteMemberMutation()
-  const [usersWithMembershipNftInfo, setUsersWithMembershipNftInfo] = useState<
-    Array<UserWithNftMembership>
-  >([])
+  const [usersWithMembershipNftInfo, setUsersWithMembershipNftInfo] =
+    useState<Array<UserWithNftMembership>>(members)
 
   let isLoggedInUserMember = false
 
@@ -60,23 +59,26 @@ export default function CommunityMembers({
     async function getMemberships() {
       if (members && communityNftContract) {
         const userWithMembershipInfo: Array<UserWithNftMembership> = []
-        for (const member of members) {
-          let isOwningMembershipNft = false
-          if (member.user.wallet_address) {
-            const communityNftMembershipBalance =
-              await communityNftContract?.balanceOf(
-                member.user.wallet_address,
-                communityNFTtokenID
-              )
-            isOwningMembershipNft = communityNftMembershipBalance
-              ? !communityNftMembershipBalance.isZero()
-              : false
-          }
-          userWithMembershipInfo.push({
-            user: member.user,
-            isOwningMembershipNft,
+
+        await Promise.all(
+          members.map(async (member) => {
+            let isOwningMembershipNft = false
+            if (member.user.wallet_address) {
+              const communityNftMembershipBalance =
+                await communityNftContract?.balanceOf(
+                  member.user.wallet_address,
+                  communityNFTtokenID
+                )
+              isOwningMembershipNft = communityNftMembershipBalance
+                ? !communityNftMembershipBalance.isZero()
+                : false
+            }
+            userWithMembershipInfo.push({
+              user: member.user,
+              isOwningMembershipNft,
+            })
           })
-        }
+        )
         setUsersWithMembershipNftInfo(userWithMembershipInfo)
       }
     }
