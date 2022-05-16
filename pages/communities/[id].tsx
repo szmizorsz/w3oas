@@ -13,7 +13,7 @@ const Communities: NextPage = () => {
   const { data: session, status } = useSession()
   const sessionLoading = status === 'loading'
 
-  const { data } = useGetCommunityByIdQuery({
+  const { data, refetch } = useGetCommunityByIdQuery({
     variables: {
       id: Number(id),
     },
@@ -36,6 +36,8 @@ const Communities: NextPage = () => {
         id={Number(id)}
         community={community}
         isOwner={isOwner}
+        encodedJwt={session?.encodedJwt}
+        refetch={refetch}
       />
       {community.members_aggregate.aggregate?.count && (
         <CommunityMembers
@@ -45,6 +47,7 @@ const Communities: NextPage = () => {
           loggedInUserDiscordId={session?.providerId}
           loggedInUserId={session?.userId}
           isOwner={isOwner}
+          communityNftContractAddress={community.nft_contract_address}
         />
       )}
     </Layout>

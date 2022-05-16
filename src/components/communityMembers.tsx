@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
   Box,
   Grid,
@@ -13,7 +14,10 @@ import {
   useInsertMemberMutation,
   useDeleteMemberMutation,
 } from '../../graphql/generated/graphql'
+import useCommunityNftContract from '../hooks/useCommunityNftContract'
+import { communityNFTtokenID } from '../config/config'
 
+import type { UserWithNftMembership } from '../types/w3oas'
 import type { MemberFieldsFragment } from '../../graphql/generated/graphql'
 
 interface Props {
@@ -23,6 +27,7 @@ interface Props {
   loggedInUserDiscordId: string | undefined
   loggedInUserId: number | undefined
   isOwner: boolean
+  communityNftContractAddress: string | null | undefined
 }
 
 export default function CommunityMembers({
@@ -32,9 +37,13 @@ export default function CommunityMembers({
   loggedInUserDiscordId,
   loggedInUserId,
   isOwner,
+  communityNftContractAddress,
 }: Props) {
   const [insertMember] = useInsertMemberMutation()
   const [deleteMember] = useDeleteMemberMutation()
+  const [usersWithMembershipNftInfo, setUsersWithMembershipNftInfo] = useState<
+    Array<UserWithNftMembership>
+  >([])
 
   let isLoggedInUserMember = false
 
@@ -43,6 +52,36 @@ export default function CommunityMembers({
       .map((member) => member.user.discord_id)
       .includes(loggedInUserDiscordId)
   }
+  const communityNftContract = useCommunityNftContract(
+    communityNftContractAddress
+  )
+
+  useEffect(() => {
+    async function getMemberships() {
+      if (members && communityNftContract) {
+        const userWithMembershipInfo: Array<UserWithNftMembership> = []
+        for (const member of members) {
+          let isOwningMembershipNft = false
+          if (member.user.wallet_address) {
+            const communityNftMembershipBalance =
+              await communityNftContract?.balanceOf(
+                member.user.wallet_address,
+                communityNFTtokenID
+              )
+            isOwningMembershipNft = communityNftMembershipBalance
+              ? !communityNftMembershipBalance.isZero()
+              : false
+          }
+          userWithMembershipInfo.push({
+            user: member.user,
+            isOwningMembershipNft,
+          })
+        }
+        setUsersWithMembershipNftInfo(userWithMembershipInfo)
+      }
+    }
+    getMemberships()
+  }, [members, communityNftContract])
 
   const handleJoin = async () => {
     await insertMember({
@@ -87,8 +126,8 @@ export default function CommunityMembers({
             </GridItem>
           </Grid>
           <AccordionPanel>
-            {members.map((member) => (
-              <Box key={member.id}>
+            {usersWithMembershipNftInfo.map((member) => (
+              <Box key={member.user.discord_id}>
                 <Grid
                   templateRows="repeat(2, 1fr)"
                   templateColumns="repeat(8, 1fr)"
@@ -98,6 +137,11 @@ export default function CommunityMembers({
                   </GridItem>
                   <GridItem rowSpan={1} colSpan={4}>
                     <Box>Address: {member.user.wallet_address}</Box>
+                  </GridItem>
+                  <GridItem rowSpan={1} colSpan={2}>
+                    {member.isOwningMembershipNft && (
+                      <Box>Membership NFT Claimed</Box>
+                    )}
                   </GridItem>
                 </Grid>
               </Box>
