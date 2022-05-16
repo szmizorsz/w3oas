@@ -32,7 +32,7 @@ export default async function handler(
     })
 
     const communityNFTFactory = CommunityNFTFactory__factory.connect(
-      envVars.COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS,
+      envVars.NEXT_PUBLIC_COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS,
       signer
     )
 
@@ -57,6 +57,6 @@ export default async function handler(
     })
   } catch (err) {
     console.error(err)
-    res.status(500).send({ error: 'failed to save nonce' })
+    res.status(500).send({ error: 'failed to deploy contract' })
   }
 }

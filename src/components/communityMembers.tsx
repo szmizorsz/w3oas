@@ -27,6 +27,7 @@ interface Props {
   loggedInUserDiscordId: string | undefined
   loggedInUserId: number | undefined
   isOwner: boolean
+  communityNftContractAddress: string | null | undefined
 }
 
 export default function CommunityMembers({
@@ -36,6 +37,7 @@ export default function CommunityMembers({
   loggedInUserDiscordId,
   loggedInUserId,
   isOwner,
+  communityNftContractAddress,
 }: Props) {
   const [insertMember] = useInsertMemberMutation()
   const [deleteMember] = useDeleteMemberMutation()
@@ -50,26 +52,30 @@ export default function CommunityMembers({
       .map((member) => member.user.discord_id)
       .includes(loggedInUserDiscordId)
   }
-  const communityNftContract = useCommunityNftContract()
+  const communityNftContract = useCommunityNftContract(
+    communityNftContractAddress
+  )
 
   useEffect(() => {
     async function getMemberships() {
-      if (members) {
+      if (members && communityNftContract) {
         const userWithMembershipInfo: Array<UserWithNftMembership> = []
         for (const member of members) {
+          let isOwningMembershipNft = false
           if (member.user.wallet_address) {
-            const communityNftMembership =
+            const communityNftMembershipBalance =
               await communityNftContract?.balanceOf(
                 member.user.wallet_address,
                 communityNFTtokenID
               )
-            userWithMembershipInfo.push({
-              user: member.user,
-              isOwningMembershipNft: communityNftMembership
-                ? !communityNftMembership.isZero()
-                : false,
-            })
+            isOwningMembershipNft = communityNftMembershipBalance
+              ? !communityNftMembershipBalance.isZero()
+              : false
           }
+          userWithMembershipInfo.push({
+            user: member.user,
+            isOwningMembershipNft,
+          })
         }
         setUsersWithMembershipNftInfo(userWithMembershipInfo)
       }
@@ -133,9 +139,9 @@ export default function CommunityMembers({
                     <Box>Address: {member.user.wallet_address}</Box>
                   </GridItem>
                   <GridItem rowSpan={1} colSpan={2}>
-                    <Box>
-                      Membership NFT Claimed: {member.isOwningMembershipNft}
-                    </Box>
+                    {member.isOwningMembershipNft && (
+                      <Box>Membership NFT Claimed</Box>
+                    )}
                   </GridItem>
                 </Grid>
               </Box>

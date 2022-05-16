@@ -5,6 +5,7 @@ import type { CommunityNFT } from '../typechain'
 import { CommunityNFT__factory } from '../typechain'
 
 export default function useCommunityNftContract(
+  address: string | null | undefined,
   signer?: ethers.providers.JsonRpcSigner
 ) {
   const [communityNftcontract, setCommunityNftContract] =
@@ -12,10 +13,7 @@ export default function useCommunityNftContract(
 
   useEffect(() => {
     ;(async () => {
-      if (
-        !process.env.NEXT_PUBLIC_GREETER_CONTRACT_ADDRESS ||
-        !process.env.NEXT_PUBLIC_RPC_TARGET
-      ) {
+      if (!process.env.NEXT_PUBLIC_RPC_TARGET || !address) {
         return
       }
 
@@ -23,14 +21,11 @@ export default function useCommunityNftContract(
         signer ||
         new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_TARGET)
 
-      const contract = CommunityNFT__factory.connect(
-        process.env.NEXT_PUBLIC_GREETER_CONTRACT_ADDRESS,
-        signerOrProvider
-      )
+      const contract = CommunityNFT__factory.connect(address, signerOrProvider)
 
       setCommunityNftContract(contract)
     })()
-  }, [signer])
+  }, [signer, address])
 
   return communityNftcontract
 }

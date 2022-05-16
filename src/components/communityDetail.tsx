@@ -17,15 +17,28 @@ import {
   CommunityFieldsFragment,
   useUpdateCommunityByIdMutation,
   useDeleteCommunityByIdMutation,
+  GetCommunityByIdQuery,
+  Exact,
 } from '../../graphql/generated/graphql'
 import { useRouter } from 'next/router'
-//import type { CommunityNftDeploymentResponseData } from '../../pages/api/community-nft/deployment'
+import { ApolloQueryResult } from '@apollo/client'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface Props {
   id: number
   community: CommunityFieldsFragment
   isOwner: boolean
   encodedJwt: string | undefined
+  refetch: (
+    variables?:
+      | Partial<
+          Exact<{
+            id: number
+          }>
+        >
+      | undefined
+  ) => Promise<ApolloQueryResult<GetCommunityByIdQuery>>
 }
 
 export default function CommunityDetail({
@@ -33,6 +46,7 @@ export default function CommunityDetail({
   community,
   isOwner,
   encodedJwt,
+  refetch,
 }: Props) {
   const router = useRouter()
 
@@ -79,7 +93,7 @@ export default function CommunityDetail({
   const handleCommunityNftDeployment = async (e: any) => {
     e.preventDefault()
 
-    await fetch('/api/community-nft/deployment', {
+    const fetchCommunityNftDeployment = fetch('/api/community-nft/deployment', {
       method: 'POST',
       headers: { authorization: encodedJwt ? `Bearer ${encodedJwt}` : '' },
       body: JSON.stringify({
@@ -89,10 +103,16 @@ export default function CommunityDetail({
       }),
     })
 
-    // const { error, communityNFTContractAddress } =
-    //   (await res.json()) as CommunityNftDeploymentResponseData
+    await toast.promise(fetchCommunityNftDeployment, {
+      pending: 'Deploying contract',
+      success: 'Successfully deployment 👌',
+      error: 'Something went wrong 🤯',
+    })
 
-    router.push(`/communities/${id}`)
+    // we have to trigger a refetch of the getCommunityById query to refresh the contract address
+    refetch({
+      id,
+    })
   }
 
   if (modificationOpen) {
@@ -196,14 +216,17 @@ export default function CommunityDetail({
           </Button>
         )}
         {isOwner && !community.nft_contract_address && (
-          <Button
-            ml={5}
-            variant="outlined"
-            border="1px"
-            onClick={handleCommunityNftDeployment}
-          >
-            Deploy Community NFT contract
-          </Button>
+          <>
+            <Button
+              ml={5}
+              variant="outlined"
+              border="1px"
+              onClick={handleCommunityNftDeployment}
+            >
+              Deploy Community NFT contract
+            </Button>
+            <ToastContainer />
+          </>
         )}
       </Box>
     </>
