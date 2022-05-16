@@ -22,3 +22,5 @@ export const blockchainNetworkMetadata: { [key: string]: NetworkMetadata } = {
     chainId: '0x89', // 137
   },
 }
+
+export const communityNFTtokenID = 1

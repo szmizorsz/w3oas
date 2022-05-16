@@ -21,11 +21,12 @@ insert_permissions:
           _eq: X-Hasura-User-Id
       columns:
         - id
-        - owner_id
+        - name
         - description
+        - owner_id
         - discord_id
         - icon
-        - name
+        - nft_contract_address
       backend_only: false
 select_permissions:
   - role: member
@@ -37,6 +38,7 @@ select_permissions:
         - discord_id
         - icon
         - name
+        - nft_contract_address
       filter: {}
       allow_aggregations: true
 update_permissions:
@@ -49,6 +51,7 @@ update_permissions:
         - discord_id
         - icon
         - name
+        - nft_contract_address
       filter:
         owner_id:
           _eq: X-Hasura-User-Id

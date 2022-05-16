@@ -3,6 +3,9 @@ const {
   NEXT_PUBLIC_DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET,
   NEXT_PUBLIC_GRAPHQL_URL,
+  RELAYER_API_KEY,
+  RELAYER_API_SECRET,
+  NEXT_PUBLIC_COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS,
 } = process.env
 
 if (typeof HASURA_GRAPHQL_ADMIN_SECRET === 'undefined') {
@@ -21,11 +24,28 @@ if (typeof NEXT_PUBLIC_GRAPHQL_URL === 'undefined') {
   throw new Error('NEXT_PUBLIC_GRAPHQL_URL is not configured!')
 }
 
+if (typeof RELAYER_API_KEY === 'undefined') {
+  throw new Error('RELAYER_API_KEY is not configured!')
+}
+
+if (typeof RELAYER_API_SECRET === 'undefined') {
+  throw new Error('RELAYER_API_SECRET is not configured!')
+}
+
+if (typeof NEXT_PUBLIC_COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS === 'undefined') {
+  throw new Error(
+    'NEXT_PUBLIC_COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS  is not configured!'
+  )
+}
+
 export const envVars = {
   HASURA_GRAPHQL_ADMIN_SECRET,
   NEXT_PUBLIC_DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET,
   NEXT_PUBLIC_GRAPHQL_URL,
+  RELAYER_API_KEY,
+  RELAYER_API_SECRET,
+  NEXT_PUBLIC_COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS,
 }
 
 export const hasuraRole = 'member'

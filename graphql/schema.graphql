@@ -126,6 +126,7 @@ type community {
     where: member_bool_exp
   ): member_aggregate!
   name: String!
+  nft_contract_address: String
 
   """An object relationship"""
   owner: user!
@@ -176,6 +177,7 @@ input community_bool_exp {
   id: Int_comparison_exp
   members: member_bool_exp
   name: String_comparison_exp
+  nft_contract_address: String_comparison_exp
   owner: user_bool_exp
   owner_id: Int_comparison_exp
 }
@@ -206,6 +208,7 @@ input community_insert_input {
   id: Int
   members: member_arr_rel_insert_input
   name: String
+  nft_contract_address: String
   owner: user_obj_rel_insert_input
   owner_id: Int
 }
@@ -217,6 +220,7 @@ type community_max_fields {
   icon: String
   id: Int
   name: String
+  nft_contract_address: String
   owner_id: Int
 }
 
@@ -227,6 +231,7 @@ type community_min_fields {
   icon: String
   id: Int
   name: String
+  nft_contract_address: String
   owner_id: Int
 }
 
@@ -268,6 +273,7 @@ input community_order_by {
   id: order_by
   members_aggregate: member_aggregate_order_by
   name: order_by
+  nft_contract_address: order_by
   owner: user_order_by
   owner_id: order_by
 }
@@ -297,6 +303,9 @@ enum community_select_column {
   name
 
   """column name"""
+  nft_contract_address
+
+  """column name"""
   owner_id
 }
 
@@ -309,6 +318,7 @@ input community_set_input {
   icon: String
   id: Int
   name: String
+  nft_contract_address: String
   owner_id: Int
 }
 
@@ -354,6 +364,9 @@ enum community_update_column {
 
   """column name"""
   name
+
+  """column name"""
+  nft_contract_address
 
   """column name"""
   owner_id
