@@ -8,8 +8,7 @@ import { CommunityNFTFactory__factory } from '../../../src/typechain/factories/C
 import { setNftContractAddressByCommunityIdInDB } from '../../../src/util/CommunityUtil'
 
 export type CommunityNftDeploymentResponseData = {
-  communityNFTContractAddress?: string
-  error?: string
+  result: string
 }
 
 export default async function handler(
@@ -21,6 +20,13 @@ export default async function handler(
     const communityId = body.communityId as string
     const communityOwnerAddress = body.communityOwnerAddress as string
     const membershipNFTtokenURI = body.membershipNFTtokenURI as string
+
+    console.log(
+      `Community NFT contract deployment is initiated for community: ${communityId}`
+    )
+    res.status(200).send({
+      result: 'Community NFT contract deployment initiated',
+    })
 
     const credentials = {
       apiKey: envVars.RELAYER_API_KEY,
@@ -52,11 +58,11 @@ export default async function handler(
       communityNFTContractAddress
     )
 
-    return res.status(200).send({
-      communityNFTContractAddress,
-    })
+    console.log(
+      `Community NFT contract: ${communityNFTContractAddress} is deployed for community: ${communityId}`
+    )
   } catch (err) {
     console.error(err)
-    res.status(500).send({ error: 'failed to deploy contract' })
+    res.status(500).send({ result: 'failed to deploy contract' })
   }
 }
