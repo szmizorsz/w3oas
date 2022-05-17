@@ -104,8 +104,8 @@ export default function CommunityDetail({
     })
 
     await toast.promise(fetchCommunityNftDeployment, {
-      pending: 'Deploying contract',
-      success: 'Successfully deployment 👌',
+      pending: 'Deployment initiation',
+      success: 'Successful initiation, check back in a few minutes 👌',
       error: 'Something went wrong 🤯',
     })
 
