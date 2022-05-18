@@ -48,6 +48,7 @@ const Communities: NextPage = () => {
           loggedInUserId={session?.userId}
           isOwner={isOwner}
           communityNftContractAddress={community.nft_contract_address}
+          encodedJwt={session?.encodedJwt}
         />
       )}
     </Layout>
