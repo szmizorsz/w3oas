@@ -26,9 +26,9 @@ const Communities: NextPage = () => {
 
   const community = data?.community_by_pk
 
-  const isOwner = community?.owner.id === session?.userId
-
   if (!community) return <p>No community found with the given id!</p>
+
+  const isOwner = community?.owner.id === session?.userId
 
   return (
     <Layout>

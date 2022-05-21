@@ -203,31 +203,33 @@ export default function CommunityDetail({
         </GridItem>
       </Grid>
       <Box my="6">
-        {isOwner && (
-          <Button
-            variant="outlined"
-            border="1px"
-            onClick={(e) => {
-              e.preventDefault()
-              setModificationOpen(true)
-            }}
-          >
-            Modify
-          </Button>
-        )}
-        {isOwner && !community.nft_contract_address && (
-          <>
+        <HStack>
+          {isOwner && (
             <Button
-              ml={5}
               variant="outlined"
               border="1px"
-              onClick={handleCommunityNftDeployment}
+              onClick={(e) => {
+                e.preventDefault()
+                setModificationOpen(true)
+              }}
             >
-              Deploy Community NFT contract
+              Modify
             </Button>
-            <ToastContainer />
-          </>
-        )}
+          )}
+          {isOwner && !community.nft_contract_address && (
+            <>
+              <Button
+                ml={5}
+                variant="outlined"
+                border="1px"
+                onClick={handleCommunityNftDeployment}
+              >
+                Deploy Community NFT contract
+              </Button>
+              <ToastContainer />
+            </>
+          )}
+        </HStack>
       </Box>
     </>
   )

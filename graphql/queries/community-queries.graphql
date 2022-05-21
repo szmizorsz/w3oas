@@ -42,6 +42,7 @@ fragment MemberFields on community {
 }
 
 fragment UserFields on user {
+  id
   discord_id
   discord_user_name
   wallet_address

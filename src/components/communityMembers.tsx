@@ -17,6 +17,7 @@ import {
   Td,
   TableContainer,
   Checkbox,
+  HStack,
 } from '@chakra-ui/react'
 import {
   useInsertMemberMutation,
@@ -26,6 +27,7 @@ import useCommunityNftContract from '../hooks/useCommunityNftContract'
 import { communityNFTtokenID } from '../config/config'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import ClaimCommunityNftButton from './claimCommunityNftButton'
 
 import type { UserWithNftMembership } from '../types/w3oas'
 import type { MemberFieldsFragment } from '../../graphql/generated/graphql'
@@ -55,6 +57,8 @@ export default function CommunityMembers({
   const [deleteMember] = useDeleteMemberMutation()
   const [usersWithMembershipNftInfo, setUsersWithMembershipNftInfo] =
     useState<Array<UserWithNftMembership>>(members)
+  const [loggedInUserHasMembershipNFT, setLoggedInUserHasMembershipNFT] =
+    useState(true)
   const [checkedMembers] = useState(new Map<string, boolean>())
   const [airdropDisabled, setAirdropDisabled] = useState(true)
 
@@ -91,13 +95,16 @@ export default function CommunityMembers({
               user: member.user,
               isOwningMembershipNft,
             })
+            if (member.user.id === loggedInUserId) {
+              setLoggedInUserHasMembershipNFT(isOwningMembershipNft)
+            }
           })
         )
         setUsersWithMembershipNftInfo(userWithMembershipInfo)
       }
     }
     getMemberships()
-  }, [members, communityNftContract])
+  }, [members, communityNftContract, loggedInUserId])
 
   const handleJoin = async () => {
     await insertMember({
@@ -231,16 +238,27 @@ export default function CommunityMembers({
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
-      {!isLoggedInUserMember && (
-        <Button variant="outlined" border="1px" onClick={handleJoin}>
-          Join Community
-        </Button>
-      )}
-      {isLoggedInUserMember && !isOwner && (
-        <Button variant="outlined" border="1px" onClick={handleLeave}>
-          Leave Community
-        </Button>
-      )}
+      <HStack>
+        {!isLoggedInUserMember && (
+          <Button variant="outlined" border="1px" onClick={handleJoin}>
+            Join Community
+          </Button>
+        )}
+        {isLoggedInUserMember && !isOwner && (
+          <Button variant="outlined" border="1px" onClick={handleLeave}>
+            Leave Community
+          </Button>
+        )}
+        {!loggedInUserHasMembershipNFT &&
+          isLoggedInUserMember &&
+          communityNftContractAddress && (
+            <ClaimCommunityNftButton
+              loggedInUserId={loggedInUserId}
+              nftContractAddress={communityNftContractAddress}
+              encodedJwt={encodedJwt}
+            />
+          )}
+      </HStack>
     </>
   )
 }
