@@ -5,6 +5,7 @@ import {
 } from 'defender-relay-client/lib/ethers'
 import { envVars } from '../../../src/config/serverConfig'
 import { CommunityNFT__factory } from '../../../src/typechain/factories/CommunityNFT__factory'
+import { authorizeClientRequest } from '../../../src/util/AuthUtil'
 
 export type CommunityNftDeploymentResponseData = {
   result?: string
@@ -15,6 +16,10 @@ export default async function handler(
   res: NextApiResponse<CommunityNftDeploymentResponseData>
 ) {
   try {
+    if (!authorizeClientRequest(req)) {
+      res.status(500).send({ result: 'failed to authorize the request' })
+    }
+
     const body = JSON.parse(req.body)
     const communityNftContractAddress =
       body.communityNftContractAddress as string
