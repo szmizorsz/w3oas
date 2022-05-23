@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Box,
   Grid,
@@ -24,12 +24,11 @@ import {
   useDeleteMemberMutation,
 } from '../../graphql/generated/graphql'
 import useCommunityNftContract from '../hooks/useCommunityNftContract'
-import { communityNFTtokenID } from '../config/config'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ClaimCommunityNftButton from './claimCommunityNftButton'
+import useMembersWithMembershipInfo from '../hooks/useMembersWithMembershipInfo'
 
-import type { UserWithNftMembership } from '../types/w3oas'
 import type { MemberFieldsFragment } from '../../graphql/generated/graphql'
 
 interface Props {
@@ -55,10 +54,6 @@ export default function CommunityMembers({
 }: Props) {
   const [insertMember] = useInsertMemberMutation()
   const [deleteMember] = useDeleteMemberMutation()
-  const [usersWithMembershipNftInfo, setUsersWithMembershipNftInfo] =
-    useState<Array<UserWithNftMembership>>(members)
-  const [loggedInUserHasMembershipNFT, setLoggedInUserHasMembershipNFT] =
-    useState(true)
   const [checkedMembers] = useState(new Map<string, boolean>())
   const [airdropDisabled, setAirdropDisabled] = useState(true)
 
@@ -73,38 +68,8 @@ export default function CommunityMembers({
     communityNftContractAddress
   )
 
-  useEffect(() => {
-    async function getMemberships() {
-      if (members && communityNftContract) {
-        const userWithMembershipInfo: Array<UserWithNftMembership> = []
-
-        await Promise.all(
-          members.map(async (member) => {
-            let isOwningMembershipNft = false
-            if (member.user.wallet_address) {
-              const communityNftMembershipBalance =
-                await communityNftContract?.balanceOf(
-                  member.user.wallet_address,
-                  communityNFTtokenID
-                )
-              isOwningMembershipNft = communityNftMembershipBalance
-                ? !communityNftMembershipBalance.isZero()
-                : false
-            }
-            userWithMembershipInfo.push({
-              user: member.user,
-              isOwningMembershipNft,
-            })
-            if (member.user.id === loggedInUserId) {
-              setLoggedInUserHasMembershipNFT(isOwningMembershipNft)
-            }
-          })
-        )
-        setUsersWithMembershipNftInfo(userWithMembershipInfo)
-      }
-    }
-    getMemberships()
-  }, [members, communityNftContract, loggedInUserId])
+  const { usersWithMembershipNftInfo, loggedInUserHasMembershipNFT } =
+    useMembersWithMembershipInfo(communityNftContract, members, loggedInUserId)
 
   const handleJoin = async () => {
     await insertMember({
