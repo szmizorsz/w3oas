@@ -1282,16 +1282,16 @@ export type MyCommunitiesQuery = { __typename?: 'query_root', community: Array<{
 
 export type CommunityFieldsFragment = { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, nft_contract_address?: string | null, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null, wallet_address?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null } };
 
-export type MemberFieldsFragment = { __typename?: 'community', members: Array<{ __typename?: 'member', id: number, user: { __typename?: 'user', discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } }> };
+export type MemberFieldsFragment = { __typename?: 'community', members: Array<{ __typename?: 'member', id: number, user: { __typename?: 'user', id: number, discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } }> };
 
-export type UserFieldsFragment = { __typename?: 'user', discord_id: string, discord_user_name?: string | null, wallet_address?: string | null };
+export type UserFieldsFragment = { __typename?: 'user', id: number, discord_id: string, discord_user_name?: string | null, wallet_address?: string | null };
 
 export type GetCommunityByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetCommunityByIdQuery = { __typename?: 'query_root', community_by_pk?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, nft_contract_address?: string | null, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null, wallet_address?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null }, members: Array<{ __typename?: 'member', id: number, user: { __typename?: 'user', discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } }> } | null };
+export type GetCommunityByIdQuery = { __typename?: 'query_root', community_by_pk?: { __typename?: 'community', description?: string | null, discord_id: string, icon?: string | null, id: number, name: string, nft_contract_address?: string | null, owner: { __typename?: 'user', id: number, discord_id: string, discord_email?: string | null, discord_user_name?: string | null, discord_avatar?: string | null, wallet_address?: string | null }, members_aggregate: { __typename?: 'member_aggregate', aggregate?: { __typename?: 'member_aggregate_fields', count: number } | null }, members: Array<{ __typename?: 'member', id: number, user: { __typename?: 'user', id: number, discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } }> } | null };
 
 export type UpdateCommunityByIdMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1370,6 +1370,13 @@ export type UpdateWalletForUserByIdMutationVariables = Exact<{
 
 export type UpdateWalletForUserByIdMutation = { __typename?: 'mutation_root', update_user_by_pk?: { __typename?: 'user', wallet_address?: string | null } | null };
 
+export type GetUserByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetUserByIdQuery = { __typename?: 'query_root', user_by_pk?: { __typename?: 'user', id: number, discord_id: string, discord_user_name?: string | null, wallet_address?: string | null } | null };
+
 export const CommunityFieldsFragmentDoc = gql`
     fragment CommunityFields on community {
   description
@@ -1395,6 +1402,7 @@ export const CommunityFieldsFragmentDoc = gql`
     `;
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on user {
+  id
   discord_id
   discord_user_name
   wallet_address
@@ -1845,3 +1853,38 @@ export function useUpdateWalletForUserByIdMutation(baseOptions?: Apollo.Mutation
 export type UpdateWalletForUserByIdMutationHookResult = ReturnType<typeof useUpdateWalletForUserByIdMutation>;
 export type UpdateWalletForUserByIdMutationResult = Apollo.MutationResult<UpdateWalletForUserByIdMutation>;
 export type UpdateWalletForUserByIdMutationOptions = Apollo.BaseMutationOptions<UpdateWalletForUserByIdMutation, UpdateWalletForUserByIdMutationVariables>;
+export const GetUserByIdDocument = gql`
+    query getUserById($id: Int!) {
+  user_by_pk(id: $id) {
+    ...UserFields
+  }
+}
+    ${UserFieldsFragmentDoc}`;
+
+/**
+ * __useGetUserByIdQuery__
+ *
+ * To run a query within a React component, call `useGetUserByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserByIdQuery(baseOptions: Apollo.QueryHookOptions<GetUserByIdQuery, GetUserByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GetUserByIdDocument, options);
+      }
+export function useGetUserByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserByIdQuery, GetUserByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GetUserByIdDocument, options);
+        }
+export type GetUserByIdQueryHookResult = ReturnType<typeof useGetUserByIdQuery>;
+export type GetUserByIdLazyQueryHookResult = ReturnType<typeof useGetUserByIdLazyQuery>;
+export type GetUserByIdQueryResult = Apollo.QueryResult<GetUserByIdQuery, GetUserByIdQueryVariables>;

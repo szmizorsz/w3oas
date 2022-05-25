@@ -21,6 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface CommunityNFTInterface extends ethers.utils.Interface {
   functions: {
+    "airdropMembershipNft(address[])": FunctionFragment;
     "balanceOf(address,uint256)": FunctionFragment;
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -39,6 +40,10 @@ interface CommunityNFTInterface extends ethers.utils.Interface {
     "uri(uint256)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "airdropMembershipNft",
+    values: [string[]]
+  ): string;
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [string, BigNumberish]
@@ -92,6 +97,10 @@ interface CommunityNFTInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "uri", values: [BigNumberish]): string;
 
+  decodeFunctionResult(
+    functionFragment: "airdropMembershipNft",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "balanceOfBatch",
@@ -231,6 +240,11 @@ export class CommunityNFT extends BaseContract {
   interface: CommunityNFTInterface;
 
   functions: {
+    airdropMembershipNft(
+      recepients: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -316,6 +330,11 @@ export class CommunityNFT extends BaseContract {
 
     uri(tokenId: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
   };
+
+  airdropMembershipNft(
+    recepients: string[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   balanceOf(
     account: string,
@@ -403,6 +422,11 @@ export class CommunityNFT extends BaseContract {
   uri(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    airdropMembershipNft(
+      recepients: string[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -599,6 +623,11 @@ export class CommunityNFT extends BaseContract {
   };
 
   estimateGas: {
+    airdropMembershipNft(
+      recepients: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -686,6 +715,11 @@ export class CommunityNFT extends BaseContract {
   };
 
   populateTransaction: {
+    airdropMembershipNft(
+      recepients: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     balanceOf(
       account: string,
       id: BigNumberish,
