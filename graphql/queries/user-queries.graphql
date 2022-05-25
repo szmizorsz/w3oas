@@ -33,3 +33,9 @@ mutation UpdateWalletForUserById($user_id: Int!, $address: String!) {
     wallet_address
   }
 }
+
+query getUserById($id: Int!) {
+  user_by_pk(id: $id) {
+    ...UserFields
+  }
+}

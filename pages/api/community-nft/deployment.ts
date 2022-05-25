@@ -6,6 +6,7 @@ import {
 import { envVars } from '../../../src/config/serverConfig'
 import { CommunityNFTFactory__factory } from '../../../src/typechain/factories/CommunityNFTFactory__factory'
 import { setNftContractAddressByCommunityIdInDB } from '../../../src/util/CommunityUtil'
+import { authorizeClientRequest } from '../../../src/util/AuthUtil'
 
 export type CommunityNftDeploymentResponseData = {
   communityNFTContractAddress?: string
@@ -17,6 +18,10 @@ export default async function handler(
   res: NextApiResponse<CommunityNftDeploymentResponseData>
 ) {
   try {
+    if (!authorizeClientRequest(req)) {
+      res.status(500).send({ error: 'failed to authorize the request' })
+    }
+
     const body = JSON.parse(req.body)
     const communityId = body.communityId as string
     const communityOwnerAddress = body.communityOwnerAddress as string

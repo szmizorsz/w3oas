@@ -6,6 +6,7 @@ const {
   RELAYER_API_KEY,
   RELAYER_API_SECRET,
   NEXT_PUBLIC_COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS,
+  NEXTAUTH_SECRET,
 } = process.env
 
 if (typeof HASURA_GRAPHQL_ADMIN_SECRET === 'undefined') {
@@ -38,6 +39,10 @@ if (typeof NEXT_PUBLIC_COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS === 'undefined') {
   )
 }
 
+if (typeof NEXTAUTH_SECRET === 'undefined') {
+  throw new Error('NEXTAUTH_SECRET  is not configured!')
+}
+
 export const envVars = {
   HASURA_GRAPHQL_ADMIN_SECRET,
   NEXT_PUBLIC_DISCORD_CLIENT_ID,
@@ -46,6 +51,7 @@ export const envVars = {
   RELAYER_API_KEY,
   RELAYER_API_SECRET,
   NEXT_PUBLIC_COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS,
+  NEXTAUTH_SECRET,
 }
 
 export const hasuraRole = 'member'
