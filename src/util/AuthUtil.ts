@@ -18,8 +18,7 @@ export function authorizeClientRequest(req: NextApiRequest) {
   const [, signedToken] = headerSplit
 
   try {
-    const decodedToken = jwt.verify(signedToken, envVars.NEXTAUTH_SECRET)
-    console.log(JSON.stringify(decodedToken))
+    jwt.verify(signedToken, envVars.NEXTAUTH_SECRET)
     return true
   } catch (err) {
     console.error(err)

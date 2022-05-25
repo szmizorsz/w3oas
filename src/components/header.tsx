@@ -10,8 +10,7 @@ import {
 } from '@chakra-ui/react'
 import styled from '@emotion/styled'
 import Link from 'next/link'
-import { useWeb3 } from '../util/Web3Provider'
-import { useUpdateWalletForUserByIdMutation } from '../../graphql/generated/graphql'
+import Web3Button from './web3Button'
 
 const Avatar = styled.span`
   border-radius: 2rem;
@@ -24,31 +23,10 @@ const Avatar = styled.span`
 `
 
 export default function Header() {
-  const { web3Loading, web3Provider, connectWallet, disconnectWallet } =
-    useWeb3()
-  const [updateWallet] = useUpdateWalletForUserByIdMutation()
-
   const { data: session, status } = useSession()
   const sessionLoading = status === 'loading'
 
   if (sessionLoading) return <p>Session loading...</p>
-  if (web3Loading) return <p>Web3 loading...</p>
-
-  const connectWalletAndSaveToDB = async () => {
-    const accounts = await connectWallet()
-    if (!session?.userId) {
-      throw Error('UserId is not defined in the session')
-    }
-    if (!accounts) {
-      throw Error('Wallet address is not available')
-    }
-    updateWallet({
-      variables: {
-        user_id: session?.userId,
-        address: accounts[0],
-      },
-    })
-  }
 
   return (
     <Flex
@@ -73,27 +51,7 @@ export default function Header() {
                 <ChakraLink>Community</ChakraLink>
               </Link>
             </Box>
-            <Box>
-              {web3Provider ? (
-                <Button
-                  colorScheme="blue"
-                  variant="solid"
-                  border="1px"
-                  onClick={disconnectWallet}
-                >
-                  Disconnect Wallet
-                </Button>
-              ) : (
-                <Button
-                  colorScheme="blue"
-                  variant="solid"
-                  border="1px"
-                  onClick={connectWalletAndSaveToDB}
-                >
-                  Connect Wallet
-                </Button>
-              )}
-            </Box>
+            <Web3Button userId={session?.userId} />
             <Box>
               <Avatar
                 style={{ backgroundImage: `url(${session.user.image})` }}
