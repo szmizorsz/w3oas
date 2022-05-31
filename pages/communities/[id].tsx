@@ -1,10 +1,10 @@
 import type { NextPage } from 'next'
 import Layout from '../../src/components/layout'
 import { useRouter } from 'next/router'
-import CommunityDetail from '../../src/components/communityDetail'
+import CommunityDetail from '../../src/components/community/communityDetail'
 import { useSession } from 'next-auth/react'
 import { useGetCommunityByIdQuery } from '../../graphql/generated/graphql'
-import CommunityMembers from '../../src/components/communityMembers'
+import CommunityMembers from '../../src/components/community/communityMembers'
 
 const Communities: NextPage = () => {
   const router = useRouter()

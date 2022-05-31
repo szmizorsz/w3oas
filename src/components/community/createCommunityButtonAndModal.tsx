@@ -11,7 +11,7 @@ import {
   Box,
   Link as ChakraLink,
 } from '@chakra-ui/react'
-import { useGetExistingCommunitiesByDiscordIdsQuery } from '../../graphql/generated/graphql'
+import { useGetExistingCommunitiesByDiscordIdsQuery } from '../../../graphql/generated/graphql'
 import Link from 'next/link'
 
 import type { Guild } from 'next-auth'

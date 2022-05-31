@@ -2,10 +2,10 @@ import type { NextPage } from 'next'
 import Layout from '../src/components/layout'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
-import AvailableCommunities from '../src/components/availableCommunities'
+import AvailableCommunities from '../src/components/community/availableCommunities'
 import { Grid, GridItem, Flex, Spacer, Box } from '@chakra-ui/react'
-import CreateCommunityButtonAndModal from '../src/components/createCommunityButtonAndModal'
-import MyCommunities from '../src/components/myCommunities'
+import CreateCommunityButtonAndModal from '../src/components/community/createCommunityButtonAndModal'
+import MyCommunities from '../src/components/community/myCommunities'
 
 const Community: NextPage = () => {
   const { data: session, status } = useSession()
