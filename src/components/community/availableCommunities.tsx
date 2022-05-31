@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/layout'
-import { useAvailableCommunitiesQuery } from '../../graphql/generated/graphql'
+import { useAvailableCommunitiesQuery } from '../../../graphql/generated/graphql'
 import CommunityCard from './communityCard'
 import type { Guild } from 'next-auth'
 

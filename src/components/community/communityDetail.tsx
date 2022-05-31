@@ -19,7 +19,7 @@ import {
   useDeleteCommunityByIdMutation,
   GetCommunityByIdQuery,
   Exact,
-} from '../../graphql/generated/graphql'
+} from '../../../graphql/generated/graphql'
 import { useRouter } from 'next/router'
 import { ApolloQueryResult } from '@apollo/client'
 import { ToastContainer, toast } from 'react-toastify'

@@ -22,14 +22,14 @@ import {
 import {
   useInsertMemberMutation,
   useDeleteMemberMutation,
-} from '../../graphql/generated/graphql'
-import useCommunityNftContract from '../hooks/useCommunityNftContract'
+} from '../../../graphql/generated/graphql'
+import useCommunityNftContract from '../../hooks/useCommunityNftContract'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ClaimCommunityNftButton from './claimCommunityNftButton'
-import useMembersWithMembershipInfo from '../hooks/useMembersWithMembershipInfo'
+import useMembersWithMembershipInfo from '../../hooks/useMembersWithMembershipInfo'
 
-import type { MemberFieldsFragment } from '../../graphql/generated/graphql'
+import type { MemberFieldsFragment } from '../../../graphql/generated/graphql'
 
 interface Props {
   communityId: number

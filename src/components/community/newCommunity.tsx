@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Button, HStack, FormControl, Input, Textarea } from '@chakra-ui/react'
-import { useInsertCommunityMutation } from '../../graphql/generated/graphql'
+import { useInsertCommunityMutation } from '../../../graphql/generated/graphql'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 
