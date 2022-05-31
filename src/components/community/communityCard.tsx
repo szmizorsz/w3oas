@@ -10,7 +10,7 @@ import {
   Image,
 } from '@chakra-ui/react'
 
-import type { CommunityFieldsFragment } from '../../graphql/generated/graphql'
+import type { CommunityFieldsFragment } from '../../../graphql/generated/graphql'
 
 interface Props {
   community: CommunityFieldsFragment

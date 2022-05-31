@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/layout'
-import { useMyCommunitiesQuery } from '../../graphql/generated/graphql'
+import { useMyCommunitiesQuery } from '../../../graphql/generated/graphql'
 import CommunityCard from './communityCard'
 
 interface Props {

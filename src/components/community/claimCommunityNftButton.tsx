@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useGetUserByIdLazyQuery } from '../../graphql/generated/graphql'
+import { useGetUserByIdLazyQuery } from '../../../graphql/generated/graphql'
 
 interface Props {
   nftContractAddress: string | null | undefined
