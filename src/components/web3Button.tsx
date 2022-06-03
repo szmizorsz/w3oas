@@ -1,5 +1,5 @@
 import { Button, Box } from '@chakra-ui/react'
-import { useWeb3 } from '../util/Web3Provider'
+import { useWeb3 } from './Web3Provider'
 import { useUpdateWalletForUserByIdMutation } from '../../graphql/generated/graphql'
 
 interface Web3ButtonProps {
