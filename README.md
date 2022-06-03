@@ -1,6 +1,14 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-### 2. Configure your local environment
+## Cloud environment
+
+The application is available:
+https://w3oas.vercel.app/
+
+You can read about it:
+https://medium.com/@szmizorsz/full-stack-web3-for-semi-dapps-web3-onboarding-as-a-service-cfbb70fa9d54
+
+## Set up your local environment
 
 Copy the .env.local.example file in this directory to .env.local (which will be ignored by Git):
 
@@ -11,17 +19,47 @@ cp .env.local.example .env.local
 Generate a secret for the JWT token signing, go to https://generate-secret.now.sh/32
 And set it in the NEXTAUTH_SECRET variable.
 
-Set up a new discord application with Oauth2 settings.
+Set up a new discord application with Oauth2 settings on the Discord Developer portal (https://discord.com/developers/applications)
 Set the redirect URL:
 http://localhost:3000/api/auth/callback/discord
 
-Add details for the Discord provider from your Discord application: 
+Add details for the Discord provider from your Discord application:
+
 - NEXT_PUBLIC_DISCORD_CLIENT_ID
 - DISCORD_CLIENT_SECRET
 
-## Getting Started
+Configure your local Hasura environment with the followings
 
-First, run the development server:
+- HASURA_GRAPHQL_ADMIN_SECRET
+- HASURA_GRAPHQL_JWT_SECRET='{"type": "HS256", "key": "<NEXTAUTH_SECRET>"}' - replace the NEXTAUTH_SECRET with the previously generated secret
+
+Create an Openzeppelin Defender Relay project (https://defender.openzeppelin.com/#/) and set the client id:
+NEXT_PUBLIC_WEB3AUTH_CLIENTID=
+
+Create an Alchemy application and set the Key:
+NEXT_PUBLIC_RPC_TARGET=https://polygon-mumbai.g.alchemy.com/v2/<KEY>
+
+Deploy the w3oas contracts (https://github.com/szmizorsz/w3oas-contracts) and set the community NFT factory contract:
+NEXT_PUBLIC_COMMUNITY_NFT_FACTORY_CONTRACT_ADDRESS=
+
+## Run locally
+
+Start the docker images:
+
+```
+docker-compose --env-file .env.local up -d
+```
+
+Configure the database in the Hasura console:
+http://localhost:8080/console
+Set a new database connection in Data tab/Connect database
+
+- database name: w3oas
+- database URL:postgres://postgres:postgrespassword@postgres:5432/postgres
+
+All metadata and migration (stored in hasura/metadata and hasura/migration) is applied automatically at the docker image start up
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -30,27 +68,3 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-
-
