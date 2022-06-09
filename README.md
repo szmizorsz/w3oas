@@ -59,7 +59,7 @@ Set a new database connection in Data tab/Connect database
 
 All metadata and migration (stored in hasura/metadata and hasura/migration) is applied automatically at the docker image start up
 
-Run the development server:
+Run the development server with:
 
 ```bash
 npm run dev
